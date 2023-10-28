@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="UsableFormatted.View.MessageWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UsableFormatted.View"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#33235b8e">
+        <Border Grid.Row="1" BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="500" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid>
+                <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,30,10,60">
+                    <fa:FontAwesome Icon="FileExcelOutline" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Margin="10" />
+                    <TextBlock x:Name="MessageText" Text="Notikusi kaut kāda kļūda!"  VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource DpTextBlock}" />
+                </WrapPanel>
+                <Button x:Name="CloseWindowBtn" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="6" Click="CloseWindowBtn_Click" Foreground="White">
+                    <Canvas Name="svg913" Width="16" Height="16">
+                        <Canvas.RenderTransform>
+                            <TranslateTransform X="0" Y="0"/>
+                        </Canvas.RenderTransform>
+                        <Canvas.Resources/>
+                        <!--Unknown tag: sodipodi:namedview-->
+                        <Canvas Name="Layer_x0020_1">
+                            <!--Unknown tag: metadata-->
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path906" Fill="#FFFFFFFF" StrokeThickness="0.00963856">
+                                <Path.Data>
+                                    <PathGeometry Figures="M 13.657832 2.3421687 C 15.219277 3.9036145 16 5.9469881 16 8.0000001 16 10.043374 15.219277 12.096386 13.657832 13.657832 12.096386 15.219277 10.053012 16 8.0000001 16 5.9566267 16 3.9036145 15.219277 2.3421687 13.657832 0.78072291 12.096386 0 10.053012 0 8.0000001 0 5.9566267 0.78072291 3.9036145 2.3421687 2.3421687 3.9036145 0.78072291 5.9469881 0 8.0000001 0 10.043374 0 12.096386 0.78072291 13.657832 2.3421687 Z m 0.645783 5.6578314 c 0 -1.6096385 -0.616868 -3.2289157 -1.840964 -4.453012 -1.233735 -1.233735 -2.8433738 -1.840964 -4.4530123 -1.840964 -1.6096386 0 -3.2289158 0.6168675 -4.4530122 1.840964 -1.2337349 1.2337348 -1.8409638 2.8433735 -1.8409638 4.453012 0 1.6096386 0.6168674 3.2289159 1.8409638 4.4530119 1.233735 1.233735 2.8433736 1.840965 4.4530122 1.840965 1.6096385 0 3.2289153 -0.616869 4.4530123 -1.840965 1.233734 -1.233735 1.840964 -2.8433733 1.840964 -4.4530119 z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path908" Fill="#FFFFFFFF" StrokeThickness="0.00963856">
+                                <Path.Data>
+                                    <PathGeometry Figures="m 9.66747 5.1373495 c 0.3277109 -0.3277108 0.86747 -0.3277108 1.204819 0 0.327711 0.3277108 0.327711 0.8674698 0 1.2048194 L 6.3421689 10.872289 c -0.327711 0.327711 -0.86747 0.327711 -1.2048194 0 -0.3277108 -0.32771 -0.3277108 -0.86747 0 -1.204819 z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                            <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path910" Fill="#FFFFFFFF" StrokeThickness="0.00963856">
+                                <Path.Data>
+                                    <PathGeometry Figures="m 10.862651 9.66747 c 0.327711 0.3277109 0.327711 0.86747 0 1.204819 C 10.53494 11.2 9.9951809 11.2 9.6578315 10.872289 L 5.1277109 6.3421689 c -0.3277108 -0.327711 -0.3277108 -0.86747 0 -1.2048194 0.3277108 -0.3277108 0.8674699 -0.3277108 1.2048194 0 z" FillRule="NonZero"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Canvas>
+                </Button>
+                
+                <Button x:Name="OkBtn" Style="{DynamicResource RoundButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="140" Margin="0,0,0,12" Click="OkBtn_Click">Ok</Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

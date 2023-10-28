@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="UsableFormatted.View.Loading"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UsableFormatted.View"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="#33235b8e">
+        <!--<Ellipse Width="250" Height="250" Fill="#55235b8e" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <fa:FontAwesome Icon="Refresh" Spin="True" FontSize="200" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" />-->
+
+        <Canvas x:Name="LoaderImage" Width="264" Height="264" RenderTransformOrigin="0.5, 0.5">
+            <Canvas.RenderTransform>
+                <RotateTransform x:Name="noFreeze" Angle="0" />
+            </Canvas.RenderTransform>
+            <Canvas.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="LoaderImage"
+                                Storyboard.TargetProperty="(Rectangle.RenderTransform).(RotateTransform.Angle)"
+                                From="0.0" To="360" Duration="0:0:1" RepeatBehavior="Forever" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Canvas.Triggers>
+            <Canvas.Resources/>
+            <!--Unknown tag: sodipodi:namedview-->
+            <Canvas Name="Layer_x0020_1">
+                <!--Unknown tag: metadata-->
+                <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path996" Fill="#801B4770" StrokeThickness="0.00118234">
+                    <Path.Data>
+                        <PathGeometry Figures="m 132 0 c 72.90073 0 132 59.099271 132 132 0 72.90073 -59.09927 132 -132 132 C 59.099271 264 0 204.90073 0 132 0 59.099271 59.099271 0 132 0 Z" FillRule="EvenOdd"/>
+                    </Path.Data>
+                </Path>
+                <Canvas x:Name="_2572266935248">
+                    <Canvas.RenderTransform>
+                        <ScaleTransform ScaleX="0.00118234" ScaleY="0.00118234"/>
+                    </Canvas.RenderTransform>
+                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path998" Fill="#FFE7CF85">
+                        <Path.Data>
+                            <PathGeometry Figures="m 155815 126168 c 1068 -3293 4608 -5093 7902 -4024 3293 1068 5092 4609 4023 7902 -3919 11967 -11566 22253 -21540 29482 -9738 7049 -21712 11213 -34622 11213 -12908 0 -24882 -4164 -34620 -11213 -9975 -7229 -17621 -17515 -21542 -29482 -1068 -3293 731 -6834 4024 -7902 3293 -1069 6834 731 7903 4024 3081 9408 9103 17506 16973 23207 7646 5536 17068 8802 27262 8802 10194 0 19617 -3267 27264 -8802 7868 -5701 13890 -13799 16973 -23207 z" FillRule="NonZero"/>
+                        </Path.Data>
+                    </Path>
+                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1000" Fill="#FFFFFFFF">
+                        <Path.Data>
+                            <PathGeometry Figures="m 67343 97122 c -1069 3293 -4610 5092 -7903 4024 -3293 -1069 -5092 -4610 -4024 -7903 3921 -11967 11559 -22256 21538 -29480 9739 -7058 21708 -11218 34624 -11218 12916 0 24887 4160 34625 11218 9979 7224 17618 17513 21537 29480 1069 3293 -730 6834 -4023 7903 -3294 1068 -6834 -731 -7902 -4024 -3083 -9408 -9100 -17510 -16970 -23206 -7646 -5541 -17073 -8807 -27267 -8807 -10194 0 -19620 3267 -27267 8807 -7868 5696 -13887 13798 -16968 23206 z" FillRule="NonZero"/>
+                        </Path.Data>
+                    </Path>
+                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1002" Fill="#FFFFFFFF">
+                        <Path.Data>
+                            <PathGeometry Figures="m 166965 66143 c 893 -3345 4335 -5333 7680 -4439 3345 894 5332 4335 4438 7680 l -8035 29981 c -894 3345 -4335 5333 -7680 4439 l -29981 -8036 c -3345 -893 -5333 -4335 -4439 -7680 893 -3345 4335 -5333 7680 -4438 l 23925 6411 z" FillRule="NonZero"/>
+                        </Path.Data>
+                    </Path>
+                    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path1004" Fill="#FFE7CF85">
+                        <Path.Data>
+                            <PathGeometry Figures="m 56322 154310 c -893 3346 -4335 5333 -7680 4439 -3345 -893 -5333 -4335 -4438 -7680 l 8035 -29981 c 894 -3345 4335 -5333 7680 -4438 l 29981 8035 c 3345 894 5333 4335 4439 7680 -894 3345 -4335 5333 -7680 4439 l -23926 -6412 z" FillRule="NonZero"/>
+                        </Path.Data>
+                    </Path>
+                </Canvas>
+            </Canvas>
+        </Canvas>
+
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,154 @@
+﻿<UserControl x:Class="UsableFormatted.View.DocPreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:view="clr-namespace:UsableFormatted.View"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:vm="clr-namespace:UsableFormatted.ViewModel"
+             mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:DocPreviewVM />
+    </UserControl.DataContext>
+    <Grid>
+        
+        <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" MouseDown="Logo_MouseDown">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="USABLE" Foreground="#ffe7cf85" FontSize="20" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Column="1" Text="&amp;" Margin="4,0,4,0" Foreground="#ffe7cf85" FontSize="20" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Column="2" Text="FORMATTED" Foreground="#ff235b8e" FontSize="20" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Column="3" Text="&#xae;" Foreground="#ff235b8e" FontSize="20" Padding="0" Style="{DynamicResource DpTextBlock}" />
+        </Grid>
+
+        <view:ProfileBox x:Name="ProfileBox" HorizontalAlignment="Right" VerticalAlignment="Top" />
+
+        <view:BottomLineBright HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="90,0,0,0" />
+        
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,50,0,0">
+            <Grid MouseDown="Plus_MouseDown" Margin="0,0,0,0" ToolTip="Palielināt" Cursor="Hand">
+                <fa:FontAwesome Icon="SearchPlus" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#ff235b8e" />
+            </Grid>
+            <Grid MouseDown="Minus_MouseDown" Margin="0,20,0,0" ToolTip="Samazināt" Cursor="Hand">
+                <fa:FontAwesome Icon="SearchMinus" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#ff235b8e" />
+            </Grid>
+            <Grid MouseDown="Reset_MouseDown" Margin="0,20,0,0" ToolTip="Atiestatīt izmēru" Cursor="Hand">
+                <fa:FontAwesome Icon="Search" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#ff235b8e" />
+            </Grid>
+        </StackPanel>
+
+        <Grid Margin="80,50,50,100">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Label Content="Vispārējas pamata noformējuma rekomendācijas līmenis" Visibility="{Binding IsAnonymousElementVisible}" />
+
+            <Grid Grid.Row="1">
+                <ScrollViewer x:Name="PdfViewerScroll"
+                    PanningMode="Both"
+                    Background="DarkGray"
+                    HorizontalScrollBarVisibility="Auto"
+                    >
+                    <Grid>
+                        <Grid.LayoutTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="ItemsScaleTransform" />
+                            </TransformGroup>
+                        </Grid.LayoutTransform>
+                        <view:PdfViewer x:Name="PdfViewBox" PdfPath="{Binding PfdFileName}" Timestamp="{Binding Timestamp}" />
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <WrapPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button x:Name="OpenFileButton" Click="OpenFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Atvērt DOCX" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button x:Name="OpenPdfButton" Click="OpenPdfButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Atvērt PDF" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </WrapPanel>
+
+                <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button x:Name="SaveFileButton" Click="SaveFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Saglabāt DOCX" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button x:Name="SavePdfFileButton" Click="SavePdfFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Saglabāt PDF" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </WrapPanel>
+
+                <WrapPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Button x:Name="SettingsButton" Click="SettingsButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Stila maiņa" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                    <Button x:Name="CancelButton" Click="CancelButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
+                        <Grid>
+                            <TextBlock Width="120" TextAlignment="Center" Text="Aizvērt" VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </WrapPanel>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="SettingsFrame" Background="#33235b8e" Visibility="{Binding SettingsVisibility}">
+            <Border Grid.Row="1" BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="600" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                        <TextBlock Text="Fonts" Margin="0,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <ComboBox x:Name="FontsComboBox" Width="150" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
+                        <TextBlock Text="Izmērs" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <ComboBox x:Name="FontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                        <TextBlock Text="Galvenes izmērs" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <ComboBox x:Name="HeadingFontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ComboBoxItem}">
+                                    <Setter Property="Foreground" Value="Black" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
+                        <Button x:Name="SettingsAplyBtn" Content="Pielietot" Style="{DynamicResource RoundButton}" Click="SettingsAplyBtn_Click" />
+                        <Button x:Name="SettingsSaveBtn" Content="Pievienot &amp; Saglabāt" Style="{DynamicResource RoundButton}" Click="SettingsSaveBtn_Click" Visibility="{Binding IsAuthorizedElementVisibility}" />
+                        <Button x:Name="SettingsCancelBtn" Content="Atlikt" Style="{DynamicResource RoundButton}" Click="SettingsCancelBtn_Click" />
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+
+        </Grid>
+        
+    </Grid>
+</UserControl>

@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="UsableFormatted.View.FileUpload"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:view="clr-namespace:UsableFormatted.View"
+             xmlns:vm="clr-namespace:UsableFormatted.ViewModel"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:FileUploadVM />
+    </UserControl.DataContext>
+
+    <Grid>
+
+        <view:LogoBrightBox HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <view:ProfileBox x:Name="ProfileBox" HorizontalAlignment="Right" VerticalAlignment="Top" />
+        <view:BottomLineBright HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="{Binding HistoryMargin}" />
+
+        <Grid x:Name="HistoryPanel" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="#33235b8e" Width="200" Visibility="{Binding HistoryPanelVisibility}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Nesen apstrādātie:" Margin="0,80,0,0" HorizontalAlignment="Center" Style="{DynamicResource DpTextBlock}" Foreground="#ff235b8e" />
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="HistoryBox" Orientation="Vertical" Margin="10"></StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Label Content="Vispārējas pamata noformējuma rekomendācijas līmenis" Visibility="{Binding IsAnonymousElementVisible}" />
+
+            <Border x:Name="UploadBox" Grid.Row="1" BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="500" Margin="{Binding HistoryMargin}">
+                <Grid Background="#ff235b8e">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Pievieno jaunu pielāgojamo " Style="{DynamicResource DpTextBlock}" />
+                            <TextBlock Text="failu / dokumentu*" Foreground="#ffe7cf85" Style="{DynamicResource DpTextBlock}" />
+                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Column="0" Grid.Row="0" BorderBrush="#ff1b4770" Background="#ff1b4770" Padding="4" Margin="4" BorderThickness="1" CornerRadius="4">
+                                <TextBlock x:Name="FileUploadText" TextAlignment="Left" Text=" " Width="300" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" Margin="8,0,0,0" Style="{DynamicResource DpTextBlock}" />
+                            </Border>
+
+                            <Button x:Name="OpenFileButton" Grid.Column="1" Grid.Row="0" Click="OpenFileButton_Click" Style="{DynamicResource RoundButton}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <fa:FontAwesome Icon="PlusCircle" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" Text="Pievienot" VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+
+                            <Button x:Name="AcceptBtn" Grid.Column="1" Grid.Row="1" IsEnabled="False" Click="AcceptBtn_Click" Style="{DynamicResource RoundButton}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <fa:FontAwesome Icon="Refresh" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" TextAlignment="Center" Text="Pārveidot" VerticalAlignment="Center" />
+                                </Grid>
+                            </Button>
+
+                            <StackPanel Orientation="Horizontal" x:Name="birthYearBox" Grid.Column="0" Grid.Row="1" Visibility="{Binding IsAnonymousElementVisible}" HorizontalAlignment="Right" Margin="4,2,4,2">
+                                <TextBlock Text="Ievadi savu dzimšanas gadu" VerticalAlignment="Center" FontSize="12" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+                                <TextBox x:Name="BirthYearText" Width="100" HorizontalContentAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock x:Name="LimitedInfoText" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Visibility="{Binding LimitedVisibility}" Style="{DynamicResource DpTextBlock}">
+                            <Run>Programmas funkcionalitāte ierobežota!</Run>
+                            <LineBreak />
+                            <Run>Programmas pilnai funkcionalitātei instalējiet datorā MS Office programmatūru!</Run>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Grid x:Name="DownloadBox" Background="#33235b8e" Visibility="{Binding LimitedBoxVisibility}">
+            <Border BorderBrush="White" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="480" Height="80">
+                <Border BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="480" Height="80">
+                    <Grid Background="#ff235b8e">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Foreground="White" TextAlignment="Center" Style="{DynamicResource DpTextBlock}">Apstrādātais dokuments</TextBlock>
+                        
+                        <StackPanel x:Name="OpenDownloadBox" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="auto">
+                            <Button x:Name="ProcessedOpenBtn" Click="ProcessedOpenBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
+                                <TextBlock TextAlignment="Center" Text="Atvērt" />
+                            </Button>
+                            <Button x:Name="ProcessedSaveBtn" Click="ProcessedSaveBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
+                                <TextBlock TextAlignment="Center" Text="Saglabāt" />
+                            </Button>
+                            <Button x:Name="ProcessedCloseBtn" Click="ProcessedCloseBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
+                                <TextBlock TextAlignment="Center" Text="Aizvērt" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Border>
+        </Grid>
+
+    </Grid>
+</UserControl>
