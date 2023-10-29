@@ -9,7 +9,7 @@ const usfo = {
     },
     menuList: [],
     usfoIsActive: false,
-    usfoOnOffTimeout: null,
+    showInlineMenu: false,
 
     updatePageContent: function () {
         console.log(usfo.userParams);
@@ -31,6 +31,7 @@ const usfo = {
         });
     },
 
+    // Download document with added extension "usfo" (app need to register this extension)
     downloadUsfoDocument: function () {
         const link = $(this).data("link");
         const oReq = new XMLHttpRequest();
@@ -61,33 +62,7 @@ const usfo = {
         oReq.send();
     },
 
-    streamUsfoDocument_: function () {
-        const link = $(this).data("link");
-        console.log("streamUsfoDocument_", link);
-        const wsUri = "ws://127.0.0.1:18080/";
-        const websocket = new WebSocket(wsUri);
-        function doSend(message) {
-            console.log(`SENT: ${message}`);
-            websocket.send(message);
-            console.log("try close");
-            websocket.close();
-        }
-        websocket.onopen = (e) => {
-            console.log("CONNECTED");
-            doSend(link);
-        };
-        websocket.onclose = (e) => {
-            console.log("DISCONNECTED");
-        };
-
-        websocket.onmessage = (e) => {
-            console.log("RESPONSE:", e.data);
-        };
-        websocket.onerror = (e) => {
-            console.error("Error", e);
-        };
-    },
-
+    // Download document through WebSocket stream
     streamUsfoDocument: function () {
         const link = $(this).data("link");
 
@@ -96,14 +71,12 @@ const usfo = {
         function doSend(data) {
             console.log(`SEND: ${data.length}`);
             websocket.send(data);
-            console.log("try close");
             websocket.close();
         }
-        websocket.onopen = (e) => {
+        websocket.onopen = () => {
             console.log("CONNECTED");
-            //doSend(link);
         };
-        websocket.onclose = (e) => {
+        websocket.onclose = () => {
             console.log("DISCONNECTED");
         };
 
@@ -112,8 +85,13 @@ const usfo = {
         };
         websocket.onerror = (e) => {
             console.error("Error", e);
+            websocket.close();
+            setTimeout(() => {
+                alert(
+                    "Lai izmantotu šo funkciju, jābūt aktīvai lietotnei Usable & Formatted!"
+                );
+            }, 100);
         };
-
 
         const oReq = new XMLHttpRequest();
         oReq.open("GET", link, true);
@@ -122,11 +100,15 @@ const usfo = {
             const arrayBuffer = oReq.response;
             const urlParts = oEvent.target.responseURL.split("/");
             const docFileName = urlParts[urlParts.length - 1];
-            console.log("docFileName", docFileName);
             const fileNameBytes = new TextEncoder().encode(docFileName + "\n");
-            const combinedBytes = new Uint8Array(fileNameBytes.length + arrayBuffer.byteLength);
+            const combinedBytes = new Uint8Array(
+                fileNameBytes.length + arrayBuffer.byteLength
+            );
             combinedBytes.set(fileNameBytes, 0);
-            combinedBytes.set(new Uint8Array(arrayBuffer), fileNameBytes.length);
+            combinedBytes.set(
+                new Uint8Array(arrayBuffer),
+                fileNameBytes.length
+            );
             doSend(combinedBytes);
         };
         oReq.send();
@@ -199,84 +181,105 @@ const usfo = {
 
     onTopButtonClick: function () {
         usfo.usfoIsActive = !usfo.usfoIsActive;
+        document.cookie = "usfoStatus=" + (usfo.usfoIsActive ? 1 : 0) + "; path=/";
+        usfo.setUsfoStatus();
+    },
+
+    readUsfoStatus: function () {
+        usfo.usfoIsActive =
+            +("; " + document.cookie)
+                .split(`; usfoStatus=`)
+                .pop()
+                .split(";")[0] === 1;
+    },
+
+    setUsfoStatus: function () {
         $("#usfoToggleBtn i")
             .removeClass("fa-toggle-off fa-toggle-on")
             .addClass(usfo.usfoIsActive ? "fa-toggle-on" : "fa-toggle-off");
-        clearTimeout(usfo.usfoOnOffTimeout);
-        usfo.usfoOnOffTimeout = setTimeout(function () {}, 2000);
+        if (usfo.usfoIsActive) {
+            usfo.addDocumentAnchors();
+        } else {
+            usfo.removeDocumentAnchors();
+        }
     },
 
     drawMenuItems: function () {
-        const formatButton = $("<div/>")
-            .html("<i class='fa fa-binoculars'></i>")
-            .addClass("content activityiconcontainer modicon_page")
-            .css({
-                color: "white",
-                "margin-left": "10px",
-            })
-            .attr("title", "Usable & Formatted")
-            .click(usfo.updatePageContent);
-        const dropDownButton = $("<button/>")
-            .addClass(
-                "content activityiconcontainer modicon_page btn btn-default dropdown-toggle"
-            )
-            .css({
-                color: "white",
-                width: "10px",
-                "margin-left": "1px",
-                "border-left-color": "white",
-                "border-top-left-radius": 0,
-                "border-bottom-left-radius": 0,
-            })
-            .attr("type", "button")
-            .attr("title", "Format & usable")
-            .attr("data-toggle", "dropdown");
-        const menus = [];
-        for (let i in usfo.menuList) {
-            const item = usfo.menuList[i];
-            let submenu = null;
-            if (item.items?.length) {
-                const submentuItems = [];
-                for (let j in item.items) {
-                    const subitem = item.items[j];
-                    const a = $("<a/>")
-                        .text(subitem.title)
-                        .attr("tabindex", "-1")
-                        .attr("href", "#")
-                        .attr("data-itemvalue", subitem.ic)
-                        .attr("data-itemaction", item.ic)
-                        .addClass("fu-action");
-                    submentuItems.push($("<li/>").html(a));
+        if (usfo.showInlineMenu) {
+            const formatButton = $("<div/>")
+                .html("<i class='fa fa-binoculars'></i>")
+                .addClass("content activityiconcontainer modicon_page")
+                .css({
+                    color: "white",
+                    "margin-left": "10px",
+                })
+                .attr("title", "Usable & Formatted")
+                .click(usfo.updatePageContent);
+            const dropDownButton = $("<button/>")
+                .addClass(
+                    "content activityiconcontainer modicon_page btn btn-default dropdown-toggle"
+                )
+                .css({
+                    color: "white",
+                    width: "10px",
+                    "margin-left": "1px",
+                    "border-left-color": "white",
+                    "border-top-left-radius": 0,
+                    "border-bottom-left-radius": 0,
+                })
+                .attr("type", "button")
+                .attr("title", "Format & usable")
+                .attr("data-toggle", "dropdown");
+            const menus = [];
+            for (let i in usfo.menuList) {
+                const item = usfo.menuList[i];
+                let submenu = null;
+                if (item.items?.length) {
+                    const submentuItems = [];
+                    for (let j in item.items) {
+                        const subitem = item.items[j];
+                        const a = $("<a/>")
+                            .text(subitem.title)
+                            .attr("tabindex", "-1")
+                            .attr("href", "#")
+                            .attr("data-itemvalue", subitem.ic)
+                            .attr("data-itemaction", item.ic)
+                            .addClass("fu-action");
+                        submentuItems.push($("<li/>").html(a));
+                    }
+                    submenu = [
+                        $("<a/>")
+                            .text(item.title)
+                            .attr("tabindex", "-1")
+                            .attr("href", "#")
+                            .addClass("fu-submenu"),
+                        $("<ul/>")
+                            .html(submentuItems)
+                            .addClass("dropdown-menu"),
+                    ];
+                    const menuItem = $("<li/>")
+                        .html(submenu)
+                        .addClass("dropdown-submenu");
+                    menus.push(menuItem);
                 }
-                submenu = [
-                    $("<a/>")
-                        .text(item.title)
-                        .attr("tabindex", "-1")
-                        .attr("href", "#")
-                        .addClass("fu-submenu"),
-                    $("<ul/>").html(submentuItems).addClass("dropdown-menu"),
-                ];
-                const menuItem = $("<li/>")
-                    .html(submenu)
-                    .addClass("dropdown-submenu");
-                menus.push(menuItem);
             }
-        }
-        menus.push(
-            $(
-                "<li><a tabindex='-1' href='#' data-itemaction='format'>Formatēt</a></li>"
-            )
-        );
-        const dropdownMenu = $("<div/>")
-            .addClass("dropdown")
-            .html([
-                dropDownButton,
-                $("<ul/>").addClass("dropdown-menu").html(menus),
-            ]);
+            menus.push(
+                $(
+                    "<li><a tabindex='-1' href='#' data-itemaction='format'>Formatēt</a></li>"
+                )
+            );
 
-        $("#page-header .page-context-header")
-            .append(formatButton)
-            .append(dropdownMenu);
+            const dropdownMenu = $("<div/>")
+                .addClass("dropdown")
+                .html([
+                    dropDownButton,
+                    $("<ul/>").addClass("dropdown-menu").html(menus),
+                ]);
+
+            $("#page-header .page-context-header")
+                .append(formatButton)
+                .append(dropdownMenu);
+        }
 
         $(".page-context-header").css({ overflow: "visible" });
 
@@ -301,9 +304,16 @@ const usfo = {
                 .attr("href");
             if (!href || !/mod\/resource\/view\.php/.test(href)) return;
 
+            const $ico = $("<img/>").attr(
+                "src",
+                usfo.ajaxUrl + "/favicon-16x16.png"
+            );
+
             const $dpButton = $("<div/>")
-                .html("<i class='fa fa-file-word-o'></i>")
-                .addClass("content activityiconcontainer modicon_page")
+                .append($ico)
+                .addClass(
+                    "content activityiconcontainer modicon_page usfo-button"
+                )
                 .css({
                     color: "white",
                     width: "24px",
@@ -318,6 +328,10 @@ const usfo = {
                 .click(usfo.streamUsfoDocument);
             $this.after($dpButton);
         });
+    },
+
+    removeDocumentAnchors: function () {
+        $(".usfo-button").remove();
     },
 
     initStaticValues: function () {
@@ -400,6 +414,7 @@ const usfo = {
         if (usfo.mode === "standalone") {
             //V1
             usfo.initStaticValues();
+            usfo.drawMenuItems();
         } else {
             //V2
             $.getJSON(usfo.ajaxUrl + "/initParams", function (data) {
@@ -409,8 +424,8 @@ const usfo = {
             });
         }
         usfo.drawTopButton();
-        usfo.drawMenuItems();
-        usfo.addDocumentAnchors();
+        usfo.readUsfoStatus();
+        usfo.setUsfoStatus();
     },
 };
 

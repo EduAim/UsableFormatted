@@ -57,36 +57,42 @@ namespace UsableFormatted.View
             ProfileBox.UpdateControl();
             _M._mainWindow.SetSurvey(false);
 
-            FileUploadText.Text = _fileName = string.Empty;
-            var dataContext = DataContext as FileUploadVM;
-            if (dataContext != null)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                dataContext.IsAnonymousVisible = AnonymousMode;
-                dataContext.IsLimitedVisibility = !_isMsOfficeAvailable;
-            }
-            if (AnonymousMode)
-            {
-                BirthYearText.Text = UserProfileRepo.AnonymousBirthYear > 0 ? UserProfileRepo.AnonymousBirthYear.ToString() : string.Empty;
-            }
+                FileUploadText.Text = _fileName = string.Empty;
+                var dataContext = DataContext as FileUploadVM;
+                if (dataContext != null)
+                {
+                    dataContext.IsAnonymousVisible = AnonymousMode;
+                    dataContext.IsLimitedVisibility = !_isMsOfficeAvailable;
+                }
+                if (AnonymousMode)
+                {
+                    BirthYearText.Text = UserProfileRepo.AnonymousBirthYear > 0 ? UserProfileRepo.AnonymousBirthYear.ToString() : string.Empty;
+                }
 
-            var isRecentFiles = UpdateRecentFiles();
-            if (dataContext != null)
-            {
-                dataContext.IsHistory = isRecentFiles;
-            }
-            CheckAutoLaunch();
+                var isRecentFiles = UpdateRecentFiles();
+                if (dataContext != null)
+                {
+                    dataContext.IsHistory = isRecentFiles;
+                }
+                if (!string.IsNullOrEmpty(FileOperations.AutoLaunchFileName))
+                    DocumentAutoLaunch();
+            }));
         }
 
-        private async void CheckAutoLaunch()
+        internal async void DocumentAutoLaunch()
         {
-            if (string.IsNullOrEmpty(FileOperations.AutoLaunchFileName))
-                return;
-
-            FileUploadText.Text = _fileName = FileOperations.AutoLaunchFileName;
+            _fileName = FileOperations.AutoLaunchFileName;
             FileOperations.AutoLaunchFileName = string.Empty;
+            _ = FileUploadText.Dispatcher.BeginInvoke(new Action(() => {
+                FileUploadText.Text = _fileName;
+            }));
 
             _M._mainWindow.SetLoading(true);
             await Task.Delay(1);
+            FormatSet formatSet = AnonymousMode ? Recommendations.GetByAge(DateTime.Now.Year - 2000) : UserProfileRepo.GetUserFormatSet();
+
             var uploadResult = await UploadDocument();
             if (!uploadResult)
             {
@@ -94,7 +100,6 @@ namespace UsableFormatted.View
                 return;
             }
 
-            FormatSet formatSet = AnonymousMode ? Recommendations.GetByAge(DateTime.Now.Year - 2000) : UserProfileRepo.GetUserFormatSet();
             var processResult = await ProcessDocument(formatSet);
 
             _M._mainWindow.SetLoading(false);
@@ -104,11 +109,8 @@ namespace UsableFormatted.View
                 _M._mainWindow.ShowMessage("Kļūda pārveidojot dokumentu!" + Environment.NewLine + processResult.errorMessage);
                 return;
             }
-            else if (!AnonymousMode)
-            {
-                RecentFilesRepo.AddUpdateRecentFile(_fileName, UserProfileRepo.LoggedInUserId);
-            }
 
+            _M._currentFormatSet = formatSet;
             OnDocumentProcessed();
         }
 
@@ -147,7 +149,10 @@ namespace UsableFormatted.View
             //Upload
             var uploadResult = await UploadDocument();
             if (!uploadResult)
+            {
+                _M._mainWindow.SetLoading(false);
                 return;
+            }
 
             //Process
             var processResult = await ProcessDocument(formatSet);

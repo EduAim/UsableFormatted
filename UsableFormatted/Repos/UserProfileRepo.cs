@@ -316,7 +316,8 @@ namespace UsableFormatted.Repos
                 var realm = RealmController.Instance;
                 var existing = realm.All<UserProfile>();
                 var list = existing.ToList();
-                return existing.Where(x => x.Id == userId).FirstOrDefault();
+                var existingUser = existing.Where(x => x.Id == userId).FirstOrDefault()?.Detached();
+                return existingUser;
             }
             catch (Exception ex)
             {

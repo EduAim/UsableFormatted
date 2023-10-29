@@ -47,16 +47,19 @@ namespace UsableFormatted.View
 
         private void UpdateUserElements()
         {
-            _dataContext.IsLoggedIn = UserProfileRepo.LoggedInUserId > 0;
-            UserIcon.Visibility = _dataContext.IsAuthorizedVisible;
-            AnonymousIcon.Visibility = _dataContext.IsAnonymousVisible;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                _dataContext.IsLoggedIn = UserProfileRepo.LoggedInUserId > 0;
+                UserIcon.Visibility = _dataContext.IsAuthorizedVisible;
+                AnonymousIcon.Visibility = _dataContext.IsAnonymousVisible;
 
-            LoggedInUserName.Text = _dataContext.IsLoggedIn ? (
-                string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.FullName)
-                    ? (string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.Email)
-                        ? "Lietotājs" : UserProfileRepo.LoggedInUser.Email)
-                    : UserProfileRepo.LoggedInUser.FullName
-                ) : "Neautorizēts lietotājs";
+                LoggedInUserName.Text = _dataContext.IsLoggedIn ? (
+                    string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.FullName)
+                        ? (string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.Email)
+                            ? "Lietotājs" : UserProfileRepo.LoggedInUser.Email)
+                        : UserProfileRepo.LoggedInUser.FullName
+                    ) : "Neautorizēts lietotājs";
+            }));
         }
 
         private void MenuLogin_Click(object sender, RoutedEventArgs e)

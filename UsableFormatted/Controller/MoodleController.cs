@@ -10,6 +10,7 @@ using System.Diagnostics;
 using WatsonWebsocket;
 using System.IO;
 using UsfoModels;
+using System.Configuration;
 
 namespace UsableFormatted.Controller
 {
@@ -19,19 +20,25 @@ namespace UsableFormatted.Controller
     {
         public static event DocumentReceivedHandler OnDocumentReceived;
 
+        private const string SOCKET_ADDRESS = "127.0.0.1";
         private const int SOCKET_PORT = 18080;
 
-        internal static void StartSocketServer()
+        internal static bool InitSocketServer()
         {
+            var isConfigured = ConfigurationManager.AppSettings.Get("moodleSockets") == "1";
+            if (!isConfigured)
+                return false;
+
             Task.Run(() =>
             {
                 WsServer();
             });
+            return true;
         }
 
         internal static void WsServer()
         {
-            WatsonWsServer server = new WatsonWsServer("127.0.0.1", SOCKET_PORT, false);
+            WatsonWsServer server = new WatsonWsServer(SOCKET_ADDRESS, SOCKET_PORT, false);
             server.ClientConnected += Server_ClientConnected;
             server.ClientDisconnected += Server_ClientDisconnected;
             server.MessageReceived += Server_MessageReceived;
@@ -42,8 +49,7 @@ namespace UsableFormatted.Controller
         {
             try
             {
-                Debug.WriteLine("Server_MessageReceived");
-                Debug.WriteLine("Message received from " + args.Client.ToString() + ": " + Encoding.UTF8.GetString(args.Data));
+                Debug.WriteLine("Message received from " + args.Client.ToString() + ": " + args.Data.Count);
                 byte[] dataArray = args.Data.Array;
                 int newlineIndex = Array.FindIndex(dataArray, args.Data.Offset, args.Data.Count, b => b == (byte)'\n');
                 if (newlineIndex == -1)
@@ -52,15 +58,15 @@ namespace UsableFormatted.Controller
                     return;
                 }
 
-                var fileName = Encoding.UTF8.GetString(dataArray.Take(newlineIndex).ToArray());
-                var data = dataArray.Skip(newlineIndex + 1).ToArray();
-                var fullPath = Path.Combine(FileOperations.GetTempPath(), $"usfo-{DateTime.Now:yyyyMMddHHmmssfff}-{DateTime.UtcNow.Ticks}-{fileName}");
+                var fileName = Encoding.UTF8.GetString(args.Data.Take(newlineIndex).ToArray());
+                var data = args.Data.Skip(newlineIndex + 1).ToArray();
+                var fullPath = Path.Combine(FileOperations.GetTempPath(), $"usfo-{DateTime.Now:yyyyMMddHHmmssfff}-{fileName}");
                 File.WriteAllBytes(fullPath, data);
 
                 Debug.WriteLine($"Filename: {fullPath}; Length: {data.Length}");
 
                 if (OnDocumentReceived != null)
-                    OnDocumentReceived(fileName, new EventArgs());
+                    OnDocumentReceived(fullPath, new EventArgs());
             }
             catch (Exception ex)
             {
