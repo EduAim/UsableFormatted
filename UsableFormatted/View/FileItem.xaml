@@ -12,7 +12,7 @@
         <Button x:Name="FileBtn" FontSize="18" Style="{DynamicResource RoundButtonXl}" Click="FileBtn_Click">
             <Button.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Atvlert" Click="MenuOpen_Click" />
+                    <MenuItem Header="Atvērt" Click="MenuOpen_Click" />
                     <MenuItem Header="Noņemt no saraksta" Click="MenuRemove_Click" />
                 </ContextMenu>
             </Button.ContextMenu>

@@ -19,5 +19,23 @@ namespace UsableFormatted.Model
         public decimal FontSize { get; set; } = 14;
         public decimal HeadingFontSize { get; set; } = 16;
         public decimal LineSpace { get; set; } = 1;
+
+        public UserProfile Detached()
+        {
+            return new UserProfile
+            {
+                Id = Id,
+                Email = Email,
+                FullName = FullName,
+                PasswordHash = PasswordHash,
+                BirthYear = BirthYear,
+                Gender = Gender,
+                LanguageIcList = LanguageIcList,
+                FontName = FontName,
+                FontSize = FontSize,
+                HeadingFontSize = HeadingFontSize,
+                LineSpace = LineSpace,
+            };
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace UsableFormatted.Controller
 {
     internal static class FileOperations
     {
-        internal const string DP_EXTENSION = ".docproc";
+        internal const string DP_EXTENSION = ".usfo";
         internal static readonly string[] AccceptedExtenstions = new string[]
             {
                 ".docx",

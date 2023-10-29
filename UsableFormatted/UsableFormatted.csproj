@@ -5,8 +5,8 @@
     <TargetFramework>net6.0-windows10.0.19041.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
-    <FileVersion>2.0.0</FileVersion>
+    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <FileVersion>2.0.1</FileVersion>
     <PackageIcon>icon-128x128.png</PackageIcon>
     <ApplicationIcon>Images\icon-32x32.ico</ApplicationIcon>
     <IsPublishable>False</IsPublishable>
@@ -48,6 +48,7 @@
   <ItemGroup>
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="Realm" Version="11.5.0" />
+    <PackageReference Include="WatsonWebsocket" Version="4.0.11" />
   </ItemGroup>
 
   <ItemGroup>

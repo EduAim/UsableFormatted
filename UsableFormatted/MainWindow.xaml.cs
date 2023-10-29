@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Timers;
 
 namespace UsableFormatted
 {
@@ -41,6 +43,42 @@ namespace UsableFormatted
             {
                 SetPage(EPages.FileUpload);
             }
+            var isMoodle = MoodleController.InitSocketServer();
+            if (isMoodle)
+            {
+                MoodleController.OnDocumentReceived += MoodleController_DocumentReceived;
+            }
+        }
+
+        private void MoodleController_DocumentReceived(object sender, EventArgs e)
+        {
+            if (!(sender is string phrase) || string.IsNullOrEmpty(phrase))
+                return;
+            
+            FileOperations.AutoLaunchFileName = phrase;
+            SetWindowActive();
+            if (ViewFileUpload.Visibility == Visibility.Visible)
+            {
+                ViewFileUpload.DocumentAutoLaunch();
+            }
+            else
+            {
+                SetPage(EPages.FileUpload);
+            }
+        }
+
+        public void SetWindowActive()
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (!this.IsVisible)
+                    this.Show();
+
+                if (this.WindowState == WindowState.Minimized)
+                    this.WindowState = WindowState.Normal;
+
+                this.Activate();
+            }));
         }
 
         public void SetPage(EPages page)
@@ -51,11 +89,14 @@ namespace UsableFormatted
                 { EPages.Preview, ViewDocPreview },
             };
 
-            foreach (var control in controlDict)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                control.Value.Visibility = control.Key == page ? Visibility.Visible : Visibility.Collapsed;
-            }
-            MainBackground.Color = page == EPages.LoginView ? (Color)ColorConverter.ConvertFromString("#ff235b8e") : Colors.White;
+                foreach (var control in controlDict)
+                {
+                    control.Value.Visibility = control.Key == page ? Visibility.Visible : Visibility.Collapsed;
+                }
+                MainBackground.Color = page == EPages.LoginView ? (Color)ColorConverter.ConvertFromString("#ff235b8e") : Colors.White;
+            }));
         }
 
         public void SetSurvey(bool isVisible)
