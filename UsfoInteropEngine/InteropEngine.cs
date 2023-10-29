@@ -9,8 +9,6 @@ namespace Usfo
 
         public override bool IsEngineAvailable()
         {
-            return false;
-
             if (_isEngineAvailable != null)
                 return (bool)_isEngineAvailable;
 

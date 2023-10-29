@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Timers;
 
 namespace UsableFormatted
 {
@@ -41,6 +43,18 @@ namespace UsableFormatted
             {
                 SetPage(EPages.FileUpload);
             }
+            MoodleController.StartSocketServer();
+            MoodleController.OnDocumentReceived += MoodleController_DocumentReceived;
+        }
+
+        private void MoodleController_DocumentReceived(object sender, EventArgs e)
+        {
+            string phrase = "default";
+            if (sender is string)
+            {
+                phrase = (string)sender;
+            }
+            Debug.WriteLine($"..MoodleController_DocumentReceived: {phrase}");
         }
 
         public void SetPage(EPages page)
