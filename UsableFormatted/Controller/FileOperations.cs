@@ -1,34 +1,37 @@
-﻿using Usfo;
-using UsfoModels;
-using UsfoModels.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using UsfoModels;
+using UsfoModels.Model;
 
 namespace UsableFormatted.Controller
 {
     internal static class FileOperations
     {
         internal const string DP_EXTENSION = ".usfo";
-        internal static readonly string[] AccceptedExtenstions = new string[]
+
+        internal static readonly HashSet<string> AccceptedExtenstions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 ".docx",
                 ".doc",
                 ".ofd",
                 ".pdf",
+                ".html",
+                ".htm",
             };
+
         internal static string AutoLaunchFileName { get; set; } = string.Empty;
 
         private static string? _tempPath = null;
         private static string _docxPath = string.Empty;
         private static string _pdfPath = string.Empty;
 
-        private static List<string>_filesToRemove = new List<string>();
+        private static List<string> _filesToRemove = new List<string>();
 
         internal static string DocxPath
         { get { return _docxPath; } }
+
         internal static string PdfPath
         { get { return _pdfPath; } }
 
@@ -63,16 +66,21 @@ namespace UsableFormatted.Controller
                 var result = true;
                 var errorMessage = string.Empty;
                 var souceFileName = PrepareDoc(sourceFile);
-
                 var shortName = string.Empty;
-                if (IsFileType(souceFileName, ".docx", out shortName))
+
+                if (!IsAllowedFileType(souceFileName))
+                {
+                    errorMessage = "Neatpazīts faila formāts!";
+                    result = false;
+                }
+                else if (IsFileType(souceFileName, ".docx", out shortName))
                 {
                     var fileName = $"{shortName}-{DateTime.Now:yyyyMMddHHmmss}";
                     _docxPath = Path.Combine(GetTempPath(), $"{fileName}.docx");
                     _pdfPath = Path.Combine(GetTempPath(), $"{fileName}.pdf");
                     File.Copy(sourceFile, _docxPath, true);
                 }
-                else if (IsFileType(souceFileName, new string[] { ".doc", ".odt", ".pdf" } , out shortName))
+                else
                 {
                     var fileName = Path.Combine(GetTempPath(), $"{shortName}-{DateTime.Now:yyyyMMddHHmmss}");
                     _docxPath = Path.Combine(GetTempPath(), $"{fileName}.docx");
@@ -81,11 +89,6 @@ namespace UsableFormatted.Controller
                     (result, errorMessage) = engine.CopyFromDoc(sourceFile, _docxPath);
                     if (!result)
                         return (false, errorMessage);
-                }
-                else
-                {
-                    errorMessage = "Neatpazīts faila formāts!";
-                    result = false;
                 }
 
                 return (result, errorMessage);
@@ -122,15 +125,20 @@ namespace UsableFormatted.Controller
                 // Try copy
                 var tempFileName = Path.Combine(tempPath, $"dptemp-{DateTime.Now:yyyyMMddHHmmss}-" + newFileName);
                 File.Copy(sourceFileName, tempFileName, true);
-                _filesToRemove.Add(sourceFileName); 
+                _filesToRemove.Add(sourceFileName);
                 _filesToRemove.Add(tempFileName);
                 return tempFileName;
             }
-            catch(Exception ex )
+            catch (Exception ex)
             {
                 ex.TraceEx();
                 return sourceFileName;
             }
+        }
+
+        internal static bool IsAllowedFileType(string souceFileName)
+        {
+            return !string.IsNullOrEmpty(souceFileName) && AccceptedExtenstions.Contains(Path.GetExtension(souceFileName));
         }
 
         private static bool IsFileType(string fileName, string fileType, out string shortName)
@@ -150,7 +158,7 @@ namespace UsableFormatted.Controller
                     return true;
                 }
                 return false;
-            } 
+            }
             catch (Exception ex)
             {
                 ex.TraceEx();
@@ -163,7 +171,7 @@ namespace UsableFormatted.Controller
             shortName = string.Empty;
             try
             {
-                foreach(var fileType in fileTypes)
+                foreach (var fileType in fileTypes)
                 {
                     if (IsFileType(fileName, fileType, out shortName))
                         return true;
@@ -187,16 +195,15 @@ namespace UsableFormatted.Controller
             var path = Path.Combine(Path.GetTempPath(), "DP_log.txt");
             _ = File.AppendAllLinesAsync(path, output);
 
-
             if (args.Length == 0)
                 return;
 
             for (var i = 0; i < args.Length; i++)
             {
                 var fileName = args[i].ToLower();
-                foreach(var extenstion in AccceptedExtenstions)
+                foreach (var extenstion in AccceptedExtenstions)
                 {
-                    if (fileName.EndsWith(extenstion) || fileName.EndsWith(extenstion+ DP_EXTENSION))
+                    if (fileName.EndsWith(extenstion) || fileName.EndsWith(extenstion + DP_EXTENSION))
                     {
                         AutoLaunchFileName = fileName;
                         return;
@@ -204,6 +211,5 @@ namespace UsableFormatted.Controller
                 }
             }
         }
-
     }
 }

@@ -23,6 +23,7 @@ using UsableFormatted.Repos;
 using UsableFormatted.ViewModel;
 using Microsoft.Win32;
 using UsfoModels;
+using System.Globalization;
 
 namespace UsableFormatted.View
 {
@@ -117,7 +118,7 @@ namespace UsableFormatted.View
         private void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            var docTypes = _isMsOfficeAvailable ? "*.docx;*.doc;*.pdf;*.odt;*.html;*.htm" : "*.docx";
+            var docTypes = _isMsOfficeAvailable ? string.Join(";", FileOperations.AccceptedExtenstions.Select(x => $"*{x}")) : "*.docx";
             openFileDialog.Filter = $"Document files|{docTypes}";
             if (openFileDialog.ShowDialog() == true)
             {
@@ -179,6 +180,9 @@ namespace UsableFormatted.View
 
         private async Task<bool> UploadDocument()
         {
+            if (!FileOperations.IsAllowedFileType(_fileName))
+                return false;
+
             var uploadResult = await Task.Run(() =>
             {
                 return FileOperations.UploadNewFile(_fileName);

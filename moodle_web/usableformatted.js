@@ -9,10 +9,24 @@ const usfo = {
     },
     menuList: [],
     usfoIsActive: false,
-    showInlineMenu: false,
+    showInlineMenu: true,
+    isAutoFormat: false,
+
+    getCookie: function (cookieName) {
+        return ("; " + document.cookie)
+            .split(`; ${cookieName}=`)
+            .pop()
+            .split(";")[0];
+    },
+    setCookie: function (cookieName, cookieValue) {
+        const d = new Date();
+        d.setTime(d.getTime() + 30 * 24 * 60 * 60 * 1000);
+        const expires = "expires=" + d.toUTCString();
+        document.cookie =
+            cookieName + "=" + cookieValue + ";" + expires + ";path=/";
+    },
 
     updatePageContent: function () {
-        console.log(usfo.userParams);
         $("#page-content .no-overflow p, #page-content .no-overflow div").each(
             function () {
                 $(this).css({
@@ -40,7 +54,8 @@ const usfo = {
         oReq.onload = function (oEvent) {
             const arrayBuffer = oReq.response;
             const urlParts = oEvent.target.responseURL.split("/");
-            const docFileName = urlParts[urlParts.length - 1] + ".usfo";
+            const docFileName =
+                urlParts[urlParts.length - 1].split("?")[0] + ".usfo";
             const blob = new Blob([arrayBuffer], {
                 type: "application/octet-stream",
             });
@@ -64,7 +79,8 @@ const usfo = {
 
     // Download document through WebSocket stream
     streamUsfoDocument: function () {
-        const link = $(this).data("link");
+        const $this = $(this);
+        const link = $this.data("link");
 
         const wsUri = "ws://127.0.0.1:18080/";
         const websocket = new WebSocket(wsUri);
@@ -99,7 +115,11 @@ const usfo = {
         oReq.onload = function (oEvent) {
             const arrayBuffer = oReq.response;
             const urlParts = oEvent.target.responseURL.split("/");
-            const docFileName = urlParts[urlParts.length - 1];
+            const docFileName = urlParts[urlParts.length - 1].split("?")[0];
+            const extension = docFileName.split(".").pop();
+            if (extension !== "docx" && extension !== "doc"  && extension !== "odt" && extension !== "pdf") {
+                return;
+            }
             const fileNameBytes = new TextEncoder().encode(docFileName + "\n");
             const combinedBytes = new Uint8Array(
                 fileNameBytes.length + arrayBuffer.byteLength
@@ -114,35 +134,31 @@ const usfo = {
         oReq.send();
     },
 
+    readUserParams: function () {
+        usfo.userParams.fontName =
+            usfo.getCookie("usfoFormat_fontName") || "Times New Roman";
+        usfo.userParams.fontSize = usfo.getCookie("usfoFormat_fontSize") || 18;
+        usfo.userParams.headingFontSize =
+            usfo.getCookie("usfoFormat_headingFontSize") || 22;
+
+        usfo.isAutoFormat = +usfo.getCookie("usfoAutoFormat") === 1;
+    },
+
     setUserParam: function (action, value) {
-        console.log(
-            "setUserParam",
-            action,
-            value,
-            usfo.ajaxUrl + "/setUserValue"
-        );
         usfo.userParams[action] = value;
-        $.post(
-            usfo.ajaxUrl + "/setUserValue",
-            { ic: action, value: value },
-            function () {
-                console.log("post response");
-            }
-        )
-            .fail(function (e) {
-                console.log("post fail", e);
-            })
-            .done(function () {
-                console.log("post done");
-            });
+        usfo.setCookie("usfoFormat_" + action, value);
+        usfo.updateActiveMenuItems();
         usfo.updatePageContent();
     },
 
     onDropDownAction: function (action, value) {
-        $(".dropdown-submenu a.fu-submenu").next("ul").hide();
+        $(".dropdown-submenu a.usfo-submenu").next("ul").hide();
         switch (action) {
             case "format":
                 usfo.updatePageContent();
+                return;
+            case "autoformat":
+                usfo.toggleAutoFormat();
                 return;
             case "fontName":
             case "fontSize":
@@ -152,19 +168,35 @@ const usfo = {
         }
     },
 
+    toggleAutoFormat: function () {
+        usfo.isAutoFormat = !usfo.isAutoFormat;
+        usfo.setCookie("usfoAutoFormat", usfo.isAutoFormat ? 1 : 0);
+        usfo.updateAutoFormat();
+    },
+
+    updateAutoFormat: function () {
+        $(".usfo-autoformat").toggleClass("active", usfo.isAutoFormat);
+        if (usfo.isAutoFormat && usfo.usfoIsActive) {
+            usfo.updatePageContent();
+        }
+    },
+
     addHeaderScripts: function () {
         $("head").append(
             "<link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>"
         );
-        $("head").append(
-            '<style type="text/css">.dropdown-submenu{position: relative;} .dropdown-submenu .dropdown-menu{top:0;left:100%;margin-top:-1px;}</style>'
-        );
+        const style =
+            "a.usfo-action,a.usfo-submenu{margin:0 15px 0 15px;white-space:nowrap;} " +
+            'a.usfo-action.active:before{font-family:FontAwesome;content:"\uf00c";font-size:.75rem;padding-left:.25rem;} ' +
+            "a.usfo-action.active{margin-left:0;}" +
+            ".dropdown-submenu{position: relative;} .dropdown-submenu .dropdown-menu{top:0;left:100%;margin-top:-1px;}";
+        $("head").append('<style type="text/css">' + style + "</style>");
     },
 
     drawTopButton: function () {
         const $faicon = $("<i class='fa fa-toggle-off'></i>");
         const $ico = $("<img/>")
-            .attr("src", usfo.ajaxUrl + "/favicon-16x16.png")
+            .attr("src", usfo.ajaxUrl + "/favicon-32x32.png")
             .css({ marginRight: "2px" });
         const $subdiv = $("<div/>")
             .addClass("popover-region-toggle nav-link icon-no-margin")
@@ -181,16 +213,13 @@ const usfo = {
 
     onTopButtonClick: function () {
         usfo.usfoIsActive = !usfo.usfoIsActive;
-        document.cookie = "usfoStatus=" + (usfo.usfoIsActive ? 1 : 0) + "; path=/";
+        document.cookie =
+            "usfoStatus=" + (usfo.usfoIsActive ? 1 : 0) + "; path=/";
         usfo.setUsfoStatus();
     },
 
     readUsfoStatus: function () {
-        usfo.usfoIsActive =
-            +("; " + document.cookie)
-                .split(`; usfoStatus=`)
-                .pop()
-                .split(";")[0] === 1;
+        usfo.usfoIsActive = +usfo.getCookie("usfoStatus") == 1;
     },
 
     setUsfoStatus: function () {
@@ -202,112 +231,149 @@ const usfo = {
         } else {
             usfo.removeDocumentAnchors();
         }
+        $(".usfo-menu-btn").css({
+            visibility: usfo.usfoIsActive ? "visible" : "hidden",
+        });
+    },
+
+    updateActiveMenuItems: function () {
+        for (let i in usfo.userParams) {
+            const item = usfo.userParams[i];
+            $(".usfo-mainmenu[data-action=" + i + "] a.active").removeClass("active");
+            $(".usfo-mainmenu[data-action=" + i + "] a[data-itemvalue='" + item + "']").addClass("active");
+        }
     },
 
     drawMenuItems: function () {
-        if (usfo.showInlineMenu) {
-            const formatButton = $("<div/>")
-                .html("<i class='fa fa-binoculars'></i>")
-                .addClass("content activityiconcontainer modicon_page")
-                .css({
-                    color: "white",
-                    "margin-left": "10px",
-                })
-                .attr("title", "Usable & Formatted")
-                .click(usfo.updatePageContent);
-            const dropDownButton = $("<button/>")
-                .addClass(
-                    "content activityiconcontainer modicon_page btn btn-default dropdown-toggle"
-                )
-                .css({
-                    color: "white",
-                    width: "10px",
-                    "margin-left": "1px",
-                    "border-left-color": "white",
-                    "border-top-left-radius": 0,
-                    "border-bottom-left-radius": 0,
-                })
-                .attr("type", "button")
-                .attr("title", "Format & usable")
-                .attr("data-toggle", "dropdown");
-            const menus = [];
-            for (let i in usfo.menuList) {
-                const item = usfo.menuList[i];
-                let submenu = null;
-                if (item.items?.length) {
-                    const submentuItems = [];
-                    for (let j in item.items) {
-                        const subitem = item.items[j];
-                        const a = $("<a/>")
-                            .text(subitem.title)
-                            .attr("tabindex", "-1")
-                            .attr("href", "#")
-                            .attr("data-itemvalue", subitem.ic)
-                            .attr("data-itemaction", item.ic)
-                            .addClass("fu-action");
-                        submentuItems.push($("<li/>").html(a));
-                    }
-                    submenu = [
-                        $("<a/>")
-                            .text(item.title)
-                            .attr("tabindex", "-1")
-                            .attr("href", "#")
-                            .addClass("fu-submenu"),
-                        $("<ul/>")
-                            .html(submentuItems)
-                            .addClass("dropdown-menu"),
-                    ];
-                    const menuItem = $("<li/>")
-                        .html(submenu)
-                        .addClass("dropdown-submenu");
-                    menus.push(menuItem);
+        const formatButton = $("<div/>")
+            .append(
+                $("<img/>").attr("src", usfo.ajaxUrl + "/favicon-32x32.png")
+            )
+            .addClass(
+                "content activityiconcontainer modicon_page usfo-menu-btn"
+            )
+            .css({
+                color: "white",
+                "margin-left": "10px",
+                width: "40px",
+                height: "40px",
+                visibility: "hidden",
+            })
+            .attr("title", "Usable & Formatted")
+            .click(usfo.updatePageContent);
+        const dropDownButton = $("<button/>")
+            .addClass(
+                "content activityiconcontainer modicon_page btn btn-default dropdown-toggle"
+            )
+            .css({
+                color: "white",
+                width: "10px",
+                height: "40px",
+                "margin-left": "1px",
+                "border-left-color": "white",
+                "border-top-left-radius": 0,
+                "border-bottom-left-radius": 0,
+            })
+            .attr("type", "button")
+            .attr("title", "Format & usable")
+            .attr("data-toggle", "dropdown");
+        const menus = [];
+        for (let i in usfo.menuList) {
+            const item = usfo.menuList[i];
+            let submenu = null;
+            if (item.items?.length) {
+                const submentuItems = [];
+                for (let j in item.items) {
+                    const subitem = item.items[j];
+                    const a = $("<a/>")
+                        .text(subitem.title)
+                        .attr("tabindex", "-1")
+                        .attr("href", "#")
+                        .attr("data-itemvalue", subitem.ic)
+                        .attr("data-itemaction", item.ic)
+                        .addClass("usfo-action");
+                    submentuItems.push($("<li/>").append(a));
                 }
+                submenu = [
+                    $("<a/>")
+                        .text(item.title)
+                        .attr("tabindex", "-1")
+                        .attr("href", "#")
+                        .addClass("usfo-submenu"),
+                    $("<ul/>").html(submentuItems).addClass("dropdown-menu"),
+                ];
+                const menuItem = $("<li/>")
+                    .append(submenu)
+                    .attr("data-action", item.ic)
+                    .addClass("dropdown-submenu usfo-mainmenu");
+                menus.push(menuItem);
             }
-            menus.push(
-                $(
-                    "<li><a tabindex='-1' href='#' data-itemaction='format'>Formatēt</a></li>"
-                )
-            );
-
-            const dropdownMenu = $("<div/>")
-                .addClass("dropdown")
-                .html([
-                    dropDownButton,
-                    $("<ul/>").addClass("dropdown-menu").html(menus),
-                ]);
-
-            $("#page-header .page-context-header")
-                .append(formatButton)
-                .append(dropdownMenu);
         }
+        menus.push(
+            $(
+                "<li><a tabindex='-1' href='#' class='usfo-action' data-itemaction='format'>Formatēt</a></li>"
+            )
+        );
+        menus.push(
+            $(
+                "<li><a tabindex='-1' href='#' class='usfo-action usfo-autoformat' data-itemaction='autoformat'>Formatēt automātiski</a></li>"
+            )
+        );
+        menus.push(
+            $(
+                "<li><a tabindex='-1' href='https://www.eduaim.eu/tools#UsableFormatted' class='usfo-action' target='_blank'>Par Usable &amp; Formatted</a></li>"
+            )
+        );
+
+
+        const dropdownMenu = $("<div/>")
+            .addClass("dropdown usfo-menu-btn")
+            .css({
+                visibility: "hidden",
+            })
+            .html([
+                dropDownButton,
+                $("<ul/>").addClass("dropdown-menu").html(menus),
+            ]);
+
+        $("#page-header .page-context-header")
+            .append(formatButton)
+            .append(dropdownMenu);
 
         $(".page-context-header").css({ overflow: "visible" });
 
-        $(".dropdown-submenu a.fu-submenu").on("click", function (e) {
-            $(this).next("ul").toggle();
+        $(".dropdown-submenu a.usfo-submenu").on("click", function (e) {
+            $(".usfo-mainmenu ul").hide();
+            $(this).next("ul").show();
             e.stopPropagation();
             e.preventDefault();
         });
-        $(".fu-action").on("click", function () {
+        $(".usfo-action").on("click", function () {
             const $this = $(this);
             const action = $this.data("itemaction");
             const value = $this.data("itemvalue");
             usfo.onDropDownAction(action, value);
         });
+        usfo.updateActiveMenuItems();
     },
 
     addDocumentAnchors: function () {
         $(".activity-item .activity-instance ").each(function () {
             const $this = $(this);
-            const href = $this
-                .find(".modtype_resource .activityname a")
-                .attr("href");
+            const $a = $this.find(".modtype_resource .activityname a");
+            let oc = "";
+            const onclickEvent = $a.attr("onclick");
+            if (onclickEvent && onclickEvent.indexOf("window.open") > -1) {
+                const match = onclickEvent.match(/window\.open\('([^']+)'/);
+                oc = !!match && match[1] || "";
+            }
+    
+            const href = oc || $a.attr("href");
             if (!href || !/mod\/resource\/view\.php/.test(href)) return;
 
-            const $ico = $("<img/>").attr(
-                "src",
-                usfo.ajaxUrl + "/favicon-16x16.png"
-            );
+            const $ico = $("<img/>")
+                .attr("src", usfo.ajaxUrl + "/favicon-32x32.png")
+                .css({ width: 20, height: 20 });
 
             const $dpButton = $("<div/>")
                 .append($ico)
@@ -324,7 +390,6 @@ const usfo = {
                 })
                 .attr("title", "Usable & Formatted")
                 .attr("data-link", href)
-                // .click(usfo.downloadUsfoDocument);
                 .click(usfo.streamUsfoDocument);
             $this.after($dpButton);
         });
@@ -414,6 +479,7 @@ const usfo = {
         if (usfo.mode === "standalone") {
             //V1
             usfo.initStaticValues();
+            usfo.readUserParams();
             usfo.drawMenuItems();
         } else {
             //V2
@@ -426,16 +492,28 @@ const usfo = {
         usfo.drawTopButton();
         usfo.readUsfoStatus();
         usfo.setUsfoStatus();
+        usfo.updateAutoFormat();
+    },
+
+    start: function () {
+        document.cookie =
+            "usfoIsEnabled=1; expires=Thu, 01 Jan 2026 00:00:00 GMT; path=/";
+    },
+    stop: function () {
+        document.cookie =
+            "usfoIsEnabled=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     },
 };
 
 const fuScriptUrl = new URL(document.currentScript.src);
 
-(function () {
-    usfo.jqTimer = setInterval(function () {
-        if (window.jQuery) {
-            clearInterval(usfo.jqTimer);
-            usfo.init(fuScriptUrl);
-        }
-    }, 100);
-})();
+if (+usfo.getCookie("usfoIsEnabled") === 1) {
+    (function () {
+        usfo.jqTimer = setInterval(function () {
+            if (window.jQuery) {
+                clearInterval(usfo.jqTimer);
+                usfo.init(fuScriptUrl);
+            }
+        }, 100);
+    })();
+}
