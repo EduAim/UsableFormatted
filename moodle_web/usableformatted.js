@@ -26,6 +26,46 @@ const usfo = {
             cookieName + "=" + cookieValue + ";" + expires + ";path=/";
     },
 
+    alert: function (messageText) {
+        const $overlay = $("<div>", {
+            id: "usfo-message-box-overlay",
+        }).appendTo("body");
+
+        const $messageBox = $("<div>", {
+            id: "usfo-message-box",
+        }).appendTo($overlay);
+
+        const $messageHeader = $("<div>", { 
+            id: "usfo-message-header",
+        }).appendTo($messageBox);
+
+        $("<div>", {
+            id: "usfo-message-header-text",
+            text: "Usable & Formatted",
+        }).appendTo($messageHeader);
+
+        $("<div>", {
+            id: "usfo-close-button",
+            text: "×",
+            click: usfo.closeAlert,
+        }).appendTo($messageHeader);
+
+        $("<div>", {
+            id: "usfo-message-text",
+            html: messageText,
+        }).appendTo($messageBox);
+
+        $overlay.fadeIn();
+    },
+
+    // Function to hide the message box
+    closeAlert: function () {
+        // Hide the message box overlay
+        $("#usfo-message-box-overlay").fadeOut(function () {
+            $("#usfo-message-box-overlay").remove();
+        });
+    },
+
     updatePageContent: function () {
         $("#page-content .no-overflow p, #page-content .no-overflow div").each(
             function () {
@@ -103,7 +143,7 @@ const usfo = {
             console.error("Error", e);
             websocket.close();
             setTimeout(() => {
-                alert(
+                usfo.alert(
                     "Lai izmantotu šo funkciju, jābūt aktīvai lietotnei Usable & Formatted!"
                 );
             }, 100);
@@ -117,7 +157,12 @@ const usfo = {
             const urlParts = oEvent.target.responseURL.split("/");
             const docFileName = urlParts[urlParts.length - 1].split("?")[0];
             const extension = docFileName.split(".").pop();
-            if (extension !== "docx" && extension !== "doc"  && extension !== "odt" && extension !== "pdf") {
+            if (
+                extension !== "docx" &&
+                extension !== "doc" &&
+                extension !== "odt" &&
+                extension !== "pdf"
+            ) {
                 return;
             }
             const fileNameBytes = new TextEncoder().encode(docFileName + "\n");
@@ -165,6 +210,12 @@ const usfo = {
             case "headingFontSize":
                 usfo.setUserParam(action, value);
                 return;
+            case "about":
+                usfo.alert('Lasīšanas atvieglošanas rīks, izstrādāts projekta EduAim ietvaros.<br/>' +
+                    '&quot;Augstskolu digitālās kapacitātes celšana ar tiešsaistes mācību resursu un analītikas viedu integrāciju&quot;' +
+                    ' Projekts: 8.2.3.0/22/A/003 ESF (REACT-EU)' +
+                    '<br/><a href="https://www.eduaim.eu/tools#UsableFormatted" target="_blank">Plašāka informācija EduAim lapā.</a>');
+                return;
         }
     },
 
@@ -189,7 +240,15 @@ const usfo = {
             "a.usfo-action,a.usfo-submenu{margin:0 15px 0 15px;white-space:nowrap;} " +
             'a.usfo-action.active:before{font-family:FontAwesome;content:"\uf00c";font-size:.75rem;padding-left:.25rem;} ' +
             "a.usfo-action.active{margin-left:0;}" +
-            ".dropdown-submenu{position: relative;} .dropdown-submenu .dropdown-menu{top:0;left:100%;margin-top:-1px;}";
+            ".dropdown-submenu{position: relative;} .dropdown-submenu .dropdown-menu{top:0;left:100%;margin-top:-1px;}" +
+            "#usfo-message-box-overlay {display: none;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.3);" +
+            "display: flex;justify-content: center;align-items: center;z-index: 9999;}" +
+            "#usfo-message-box{background:#fff;border:1px solid #235b8e;border-radius:10px;max-width:800px;text-align:center;position:relative;}" +
+            "#usfo-close-button {position:absolute;top:0;right:10px;cursor:pointer;color:white;}" +
+            "#usfo-message-header{background-color:#235b8e;position:relative;border-radius:9px 9px 0 0;}" +
+            "#usfo-message-header-text{color:white;}" +
+            "#usfo-message-text{margin:10px;}"
+            ;
         $("head").append('<style type="text/css">' + style + "</style>");
     },
 
@@ -239,8 +298,16 @@ const usfo = {
     updateActiveMenuItems: function () {
         for (let i in usfo.userParams) {
             const item = usfo.userParams[i];
-            $(".usfo-mainmenu[data-action=" + i + "] a.active").removeClass("active");
-            $(".usfo-mainmenu[data-action=" + i + "] a[data-itemvalue='" + item + "']").addClass("active");
+            $(".usfo-mainmenu[data-action=" + i + "] a.active").removeClass(
+                "active"
+            );
+            $(
+                ".usfo-mainmenu[data-action=" +
+                    i +
+                    "] a[data-itemvalue='" +
+                    item +
+                    "']"
+            ).addClass("active");
         }
     },
 
@@ -321,10 +388,14 @@ const usfo = {
         );
         menus.push(
             $(
-                "<li><a tabindex='-1' href='https://www.eduaim.eu/tools#UsableFormatted' class='usfo-action' target='_blank'>Par Usable &amp; Formatted</a></li>"
+                "<li><a tabindex='-1' href='#' class='usfo-action' data-itemaction='about'>Par Usable &amp; Formatted</a></li>"
             )
         );
-
+        menus.push(
+            $(
+                "<li><a tabindex='-1' href='https://www.eduaim.eu/tools#UsableFormatted' class='usfo-action' target='_blank'>Par EduAim</a></li>"
+            )
+        );
 
         const dropdownMenu = $("<div/>")
             .addClass("dropdown usfo-menu-btn")
@@ -365,9 +436,9 @@ const usfo = {
             const onclickEvent = $a.attr("onclick");
             if (onclickEvent && onclickEvent.indexOf("window.open") > -1) {
                 const match = onclickEvent.match(/window\.open\('([^']+)'/);
-                oc = !!match && match[1] || "";
+                oc = (!!match && match[1]) || "";
             }
-    
+
             const href = oc || $a.attr("href");
             if (!href || !/mod\/resource\/view\.php/.test(href)) return;
 
