@@ -1,5 +1,4 @@
 const usfo = {
-    mode: "standalone",
     ajaxUrl: "",
     userParams: {
         fontName: "Times New Roman",
@@ -35,7 +34,7 @@ const usfo = {
             id: "usfo-message-box",
         }).appendTo($overlay);
 
-        const $messageHeader = $("<div>", { 
+        const $messageHeader = $("<div>", {
             id: "usfo-message-header",
         }).appendTo($messageBox);
 
@@ -144,7 +143,8 @@ const usfo = {
             websocket.close();
             setTimeout(() => {
                 usfo.alert(
-                    "Lai izmantotu šo funkciju, jābūt aktīvai lietotnei Usable & Formatted!"
+                    "Lai izmantotu šo funkciju, jābūt aktīvai lietotnei Usable & Formatted!" +
+                        '<br/><a href="https://www.eduaim.eu/tools#UsableFormatted" target="_blank">Plašāka informācija EduAim lapā.</a>'
                 );
             }, 100);
         };
@@ -211,10 +211,12 @@ const usfo = {
                 usfo.setUserParam(action, value);
                 return;
             case "about":
-                usfo.alert('Lasīšanas atvieglošanas rīks, izstrādāts projekta EduAim ietvaros.<br/>' +
-                    '&quot;Augstskolu digitālās kapacitātes celšana ar tiešsaistes mācību resursu un analītikas viedu integrāciju&quot;' +
-                    ' Projekts: 8.2.3.0/22/A/003 ESF (REACT-EU)' +
-                    '<br/><a href="https://www.eduaim.eu/tools#UsableFormatted" target="_blank">Plašāka informācija EduAim lapā.</a>');
+                usfo.alert(
+                    "Lasīšanas atvieglošanas rīks, izstrādāts projekta EduAim ietvaros.<br/>" +
+                        "&quot;Augstskolu digitālās kapacitātes celšana ar tiešsaistes mācību resursu un analītikas viedu integrāciju&quot;" +
+                        " Projekts: 8.2.3.0/22/A/003 ESF (REACT-EU)" +
+                        '<br/><a href="https://www.eduaim.eu/tools#UsableFormatted" target="_blank">Plašāka informācija EduAim lapā.</a>'
+                );
                 return;
         }
     },
@@ -247,8 +249,7 @@ const usfo = {
             "#usfo-close-button {position:absolute;top:0;right:10px;cursor:pointer;color:white;}" +
             "#usfo-message-header{background-color:#235b8e;position:relative;border-radius:9px 9px 0 0;}" +
             "#usfo-message-header-text{color:white;}" +
-            "#usfo-message-text{margin:10px;}"
-            ;
+            "#usfo-message-text{margin:10px;}";
         $("head").append('<style type="text/css">' + style + "</style>");
     },
 
@@ -547,44 +548,22 @@ const usfo = {
             "//" +
             fuScriptUrl.host +
             fuScriptUrl.pathname.replace(/\/[^/]+$/, "");
-        if (usfo.mode === "standalone") {
-            //V1
-            usfo.initStaticValues();
-            usfo.readUserParams();
-            usfo.drawMenuItems();
-        } else {
-            //V2
-            $.getJSON(usfo.ajaxUrl + "/initParams", function (data) {
-                usfo.userParams = data?.settings || {};
-                usfo.menuList = data?.menuList || [];
-                usfo.drawMenuItems();
-            });
-        }
+        usfo.initStaticValues();
+        usfo.readUserParams();
+        usfo.drawMenuItems();
         usfo.drawTopButton();
         usfo.readUsfoStatus();
         usfo.setUsfoStatus();
         usfo.updateAutoFormat();
     },
-
-    start: function () {
-        document.cookie =
-            "usfoIsEnabled=1; expires=Thu, 01 Jan 2026 00:00:00 GMT; path=/";
-    },
-    stop: function () {
-        document.cookie =
-            "usfoIsEnabled=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
-    },
 };
 
 const fuScriptUrl = new URL(document.currentScript.src);
-
-if (+usfo.getCookie("usfoIsEnabled") === 1) {
-    (function () {
-        usfo.jqTimer = setInterval(function () {
-            if (window.jQuery) {
-                clearInterval(usfo.jqTimer);
-                usfo.init(fuScriptUrl);
-            }
-        }, 100);
-    })();
-}
+(function () {
+    usfo.jqTimer = setInterval(function () {
+        if (window.jQuery) {
+            clearInterval(usfo.jqTimer);
+            usfo.init(fuScriptUrl);
+        }
+    }, 100);
+})();
