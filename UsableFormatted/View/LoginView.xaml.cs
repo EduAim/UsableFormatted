@@ -62,26 +62,26 @@ namespace UsableFormatted.View
             var password = RegPasswordText.Password;
             if (password != RegConfirmPasswordText.Password)
             {
-                _M._mainWindow.ShowMessage("Paroles nesakrīt!");
+                _M._mainWindow.ShowMessage((string)FindResource("tPasswordsDontMatch"));
                 return;
             }
 
             if (!UserProfileRepo.IsValidEmail(email))
             {
-                _M._mainWindow.ShowMessage("E-pasts nav korekts!");
+                _M._mainWindow.ShowMessage((string)FindResource("tEmailIncorrect"));
                 return;
             }
 
             if (!short.TryParse(BirthYearText.Text.Trim(), out var birthYear) || !UserProfileRepo.IsBirthYearValid(birthYear))
             {
-                _M._mainWindow.ShowMessage("Ievadiet korektu dzimšanas gadu!");
+                _M._mainWindow.ShowMessage((string)FindResource("tEnterCorrectYear"));
                 return;
             }
 
             var created = UserProfileRepo.CreateUser(email, password, birthYear);
             if (!created)
             {
-                _M._mainWindow.ShowMessage("Lietotājs ar šādu e-pastu jau eksistē!");
+                _M._mainWindow.ShowMessage((string)FindResource("tUserEmailExists"));
                 return;
             }
             var login = UserProfileRepo.LoginUser(email, password);
@@ -109,7 +109,7 @@ namespace UsableFormatted.View
             var login = UserProfileRepo.LoginUser(email, password);
             if (!login)
             {
-                _M._mainWindow.ShowMessage("Nepareizs e-pasts vai parole!");
+                _M._mainWindow.ShowMessage((string)FindResource("tIncorrectMailPass"));
                 return;
             }
             _M._mainWindow.SetPage(EPages.FileUpload);
@@ -170,7 +170,7 @@ namespace UsableFormatted.View
             if (login)
                 _M._mainWindow.SetPage(EPages.FileUpload);
             else
-                _M._mainWindow.ShowMessage("Kļūda autorizējot lietotāju!");
+                _M._mainWindow.ShowMessage((string)FindResource("tAuthError"));
         }
 
     }

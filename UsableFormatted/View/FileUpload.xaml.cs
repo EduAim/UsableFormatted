@@ -107,7 +107,7 @@ namespace UsableFormatted.View
             await Task.Delay(1);
             if (!processResult.result)
             {
-                _M._mainWindow.ShowMessage("Kļūda pārveidojot dokumentu!" + Environment.NewLine + processResult.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorConvertingDocument"] + Environment.NewLine + processResult.errorMessage);
                 return;
             }
 
@@ -161,7 +161,7 @@ namespace UsableFormatted.View
             await Task.Delay(1);
             if (!processResult.result)
             {
-                _M._mainWindow.ShowMessage("Kļūda pārveidojot dokumentu!" + Environment.NewLine + processResult.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorConvertingDocument"] + Environment.NewLine + processResult.errorMessage);
                 return;
             }
 
@@ -191,7 +191,7 @@ namespace UsableFormatted.View
             {
                 _M._mainWindow.SetLoading(false);
                 await Task.Delay(1);
-                _M._mainWindow.ShowMessage("Kļūda pievienojot jaunu dokumentu!" + Environment.NewLine + uploadResult.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorAddingNewDocument"] + Environment.NewLine + uploadResult.errorMessage);
                 return false;
             }
             return true;
@@ -235,7 +235,7 @@ namespace UsableFormatted.View
             Debug.WriteLine($"OnRecentFileSelected: {fileName}");
             if (!File.Exists(fileName))
             {
-                _M._mainWindow.ShowMessage("Dokuments nav pieejams!");
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tDocumentNotAvailable"]);
                 RecentFilesRepo.RemoveRecentFile(fileName, UserProfileRepo.LoggedInUserId);
                 UpdateRecentFiles();
                 return;
@@ -255,7 +255,7 @@ namespace UsableFormatted.View
             {
                 _M._mainWindow.SetLoading(false);
                 await Task.Delay(1);
-                _M._mainWindow.ShowMessage("Kļūda pievienojot izvēlēto dokumentu!" + Environment.NewLine + isUploaded.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorAddingSelectedDocument"] + Environment.NewLine + isUploaded.errorMessage);
                 return;
             }
             var isProcessed = await Task.Run(() =>
@@ -272,7 +272,7 @@ namespace UsableFormatted.View
             }
             else
             {
-                _M._mainWindow.ShowMessage("Kļūda pārveidojot dokumentu!" + Environment.NewLine + isProcessed.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorConvertingDocument"] + Environment.NewLine + isProcessed.errorMessage);
             }
         }
 

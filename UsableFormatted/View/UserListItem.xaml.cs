@@ -24,7 +24,6 @@ namespace UsableFormatted.View
         private readonly UserProfile _userProfile;
         private readonly Action<UserProfile> _callback;
 
-        //public string Email { get { return _userProfile?.Email ?? "--"; } }
         public string Email => _userProfile?.Email ?? "--";
 
         public UserListItem(UserProfile userProfile, Action<UserProfile> callback)

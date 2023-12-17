@@ -23,6 +23,17 @@
                     <Separator />
                     <MenuItem Header="_Exit" Click="MenuExit_Click" />
                 </MenuItem>
+                <MenuItem Header="_Language" x:Name="LangMenu">
+                    <MenuItem Header="English" Click="MenuLangEn_Click" IsCheckable="true" Tag="en" />
+                    <MenuItem Header="Latviešu" Click="MenuLangLv_Click" IsCheckable="true" Tag="lv" />
+                </MenuItem>
+                <MenuItem Header="_User" x:Name="UserMenu">
+                    <MenuItem Header="_Login" x:Name="MenuLogin" Click="MenuLogin_Click" IsEnabled="False" />
+                    <MenuItem Header="_Logout" x:Name="MenuLogout" Click="MenuLogout_Click" IsEnabled="False" />
+                    <MenuItem Header="_Register" x:Name="MenuRegister" Click="MenuRegister_Click" IsEnabled="False" />
+                    <Separator />
+                    <MenuItem Header="_User settings" x:Name="MenuSettings" Click="MenuSettings_Click" IsEnabled="False" />
+                </MenuItem>
             </Menu>
 
             <view:LoginView x:Name="ViewLoginView" Grid.Row="1" Visibility="Collapsed" />

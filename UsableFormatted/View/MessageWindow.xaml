@@ -13,7 +13,7 @@
             <Grid>
                 <WrapPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,30,10,60">
                     <fa:FontAwesome Icon="FileExcelOutline" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Margin="10" />
-                    <TextBlock x:Name="MessageText" Text="Notikusi kaut kāda kļūda!"  VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock x:Name="MessageText" Text="..."  VerticalAlignment="Center" TextWrapping="Wrap" Style="{DynamicResource DpTextBlock}" />
                 </WrapPanel>
                 <Button x:Name="CloseWindowBtn" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="6" Click="CloseWindowBtn_Click" Foreground="White">
                     <Canvas Name="svg913" Width="16" Height="16">
@@ -43,7 +43,7 @@
                     </Canvas>
                 </Button>
                 
-                <Button x:Name="OkBtn" Style="{DynamicResource RoundButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="140" Margin="0,0,0,12" Click="OkBtn_Click">Ok</Button>
+                <Button x:Name="OkBtn" Style="{DynamicResource RoundButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="140" Margin="0,0,0,12" Click="OkBtn_Click">OK</Button>
             </Grid>
         </Border>
     </Grid>

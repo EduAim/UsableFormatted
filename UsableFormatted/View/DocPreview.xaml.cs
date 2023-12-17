@@ -140,7 +140,7 @@ namespace UsableFormatted.View
             }
             else
             {
-                _M._mainWindow.ShowMessage("Kļūda pārveidojot dokumentu!" + Environment.NewLine + isProcessed.errorMessage);
+                _M._mainWindow.ShowMessage((string)App.Current.Resources["tErrorConvertingDocument"] + Environment.NewLine + isProcessed.errorMessage);
             }
         }
 

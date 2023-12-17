@@ -77,7 +77,7 @@ namespace Usfo
             catch (Exception ex)
             {
                 ex.TraceEx();
-                return (false, "Kļūda izveidojot PDF (#ME009)" + Environment.NewLine + ex.Message);
+                return (false, "Error creating PDF (#ME009)" + Environment.NewLine + ex.Message);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Usfo
             catch (Exception ex)
             {
                 ex.TraceEx();
-                return (false, "Kļūda nolasot dokumentu (ME010)" + Environment.NewLine + ex.Message);
+                return (false, "Error reading the document (ME010)" + Environment.NewLine + ex.Message);
             }
         }
     }

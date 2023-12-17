@@ -10,7 +10,7 @@
         <Border Grid.Row="1" BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="600" HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
-                <TextBlock x:Name="OutText" Text="Lietotāja iestatījumi" HorizontalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                <TextBlock x:Name="OutText" Text="{DynamicResource tUserSettings}" HorizontalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -26,27 +26,27 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Dzimšanas gads" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tYearOfBirth}" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <TextBox x:Name="BirthYearText" Grid.Column="3" Margin="0,4,0,0" />
 
-                    <TextBlock Text="Dzimums" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tGender}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <ComboBox x:Name="GenderComboBox" Grid.Row="1" Grid.Column="3" Margin="0,4,0,0" Style="{DynamicResource DpComboBoxStyle}" />
 
-                    <TextBlock Text="Pamata, ikdienā lietojamā valoda" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tDailyLanguage}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <ComboBox x:Name="LanguageComboBox" Grid.Row="2" Grid.Column="3" Margin="0,4,0,0" Style="{DynamicResource DpComboBoxStyle}" />
 
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                    <TextBlock Text="Fonts" Margin="0,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tFont}" Margin="0,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <ComboBox x:Name="FontsComboBox" Width="150" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
-                    <TextBlock Text="Size" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tSize}" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <ComboBox x:Name="FontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
                     <!--<Button x:Name="ProcessDownload" Margin="10,0,0,0" Click="ProcessDownload_Click" IsEnabled="False" Style="{DynamicResource RoundButton}">Process and download</Button>-->
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                    <TextBlock Text="Heading size" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Text="{DynamicResource tHeadingSize}" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                     <ComboBox x:Name="HeadingFontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}">
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ComboBoxItem}">
@@ -57,8 +57,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
-                    <Button x:Name="CancelBtn" Content="Atlikt" Style="{DynamicResource RoundButton}" Click="CancelBtn_Click" />
-                    <Button x:Name="SaveSettingsBtn" Content="Saglabāt" Style="{DynamicResource RoundButton}" Click="SaveSettingsBtn_Click" />
+                    <Button x:Name="CancelBtn" Content="{DynamicResource tCancel}" Style="{DynamicResource RoundButton}" Click="CancelBtn_Click" />
+                    <Button x:Name="SaveSettingsBtn" Content="{DynamicResource tSave}" Style="{DynamicResource RoundButton}" Click="SaveSettingsBtn_Click" />
                 </StackPanel>
 
             </StackPanel>

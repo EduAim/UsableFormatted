@@ -23,7 +23,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Text="Nesen apstrādātie:" Margin="0,80,0,0" HorizontalAlignment="Center" Style="{DynamicResource DpTextBlock}" Foreground="#ff235b8e" />
+            <TextBlock Text="{DynamicResource tRecentlyProcessed}" Margin="0,80,0,0" HorizontalAlignment="Center" Style="{DynamicResource DpTextBlock}" Foreground="#ff235b8e" />
             <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="HistoryBox" Orientation="Vertical" Margin="10"></StackPanel>
             </ScrollViewer>
@@ -36,14 +36,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Label Content="Vispārējas pamata noformējuma rekomendācijas līmenis" Visibility="{Binding IsAnonymousElementVisible}" />
+            <Label Content="{DynamicResource tGenRecomLevel}" Visibility="{Binding IsAnonymousElementVisible}" />
 
             <Border x:Name="UploadBox" Grid.Row="1" BorderBrush="#ff235b8e" Background="#ff235b8e" Padding="8" BorderThickness="1" CornerRadius="16" Width="500" Margin="{Binding HistoryMargin}">
                 <Grid Background="#ff235b8e">
                     <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="Pievieno jaunu pielāgojamo " Style="{DynamicResource DpTextBlock}" />
-                            <TextBlock Text="failu / dokumentu*" Foreground="#ffe7cf85" Style="{DynamicResource DpTextBlock}" />
+                            <TextBlock Text="{DynamicResource tAddNewFileP1}" Style="{DynamicResource DpTextBlock}" Margin="0,0,3,0"/>
+                            <TextBlock Text="{DynamicResource tAddNewFileP2}" Foreground="#ffe7cf85" Style="{DynamicResource DpTextBlock}" />
+                            <TextBlock Text="*" Foreground="#ffe7cf85" Style="{DynamicResource DpTextBlock}" />
                         </StackPanel>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -66,7 +67,7 @@
                                         <ColumnDefinition Width="100" />
                                     </Grid.ColumnDefinitions>
                                     <fa:FontAwesome Icon="PlusCircle" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" Text="Pievienot" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" HorizontalAlignment="Center" TextAlignment="Center" Text="{DynamicResource tFileAdd}" VerticalAlignment="Center" />
                                 </Grid>
                             </Button>
 
@@ -77,20 +78,20 @@
                                         <ColumnDefinition Width="100" />
                                     </Grid.ColumnDefinitions>
                                     <fa:FontAwesome Icon="Refresh" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                    <TextBlock Grid.Column="1" TextAlignment="Center" Text="Pārveidot" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" TextAlignment="Center" Text="{DynamicResource tFileProcess}" VerticalAlignment="Center" />
                                 </Grid>
                             </Button>
 
                             <StackPanel Orientation="Horizontal" x:Name="birthYearBox" Grid.Column="0" Grid.Row="1" Visibility="{Binding IsAnonymousElementVisible}" HorizontalAlignment="Right" Margin="4,2,4,2">
-                                <TextBlock Text="Ievadi savu dzimšanas gadu" VerticalAlignment="Center" FontSize="12" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+                                <TextBlock Text="{DynamicResource tEnterBirthDate}" VerticalAlignment="Center" FontSize="12" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
                                 <TextBox x:Name="BirthYearText" Width="100" HorizontalContentAlignment="Center" />
                             </StackPanel>
                         </Grid>
 
                         <TextBlock x:Name="LimitedInfoText" TextAlignment="Center" Foreground="White" TextWrapping="Wrap" Visibility="{Binding LimitedVisibility}" Style="{DynamicResource DpTextBlock}">
-                            <Run>Programmas funkcionalitāte ierobežota!</Run>
+                            <Run Text="{DynamicResource tAppFnLimited}" />
                             <LineBreak />
-                            <Run>Programmas pilnai funkcionalitātei instalējiet datorā MS Office programmatūru!</Run>
+                            <Run Text="{DynamicResource tAppInstallMSO}" />
                         </TextBlock>
                     </StackPanel>
                 </Grid>
@@ -106,17 +107,17 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Foreground="White" TextAlignment="Center" Style="{DynamicResource DpTextBlock}">Apstrādātais dokuments</TextBlock>
+                        <TextBlock Foreground="White" TextAlignment="Center" Style="{DynamicResource DpTextBlock}" Text="{DynamicResource tProcessedDoc}"></TextBlock>
                         
                         <StackPanel x:Name="OpenDownloadBox" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Height="auto">
                             <Button x:Name="ProcessedOpenBtn" Click="ProcessedOpenBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
-                                <TextBlock TextAlignment="Center" Text="Atvērt" />
+                                <TextBlock TextAlignment="Center" Text="{DynamicResource tOpen}" />
                             </Button>
                             <Button x:Name="ProcessedSaveBtn" Click="ProcessedSaveBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
-                                <TextBlock TextAlignment="Center" Text="Saglabāt" />
+                                <TextBlock TextAlignment="Center" Text="{DynamicResource tSave}" />
                             </Button>
                             <Button x:Name="ProcessedCloseBtn" Click="ProcessedCloseBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
-                                <TextBlock TextAlignment="Center" Text="Aizvērt" />
+                                <TextBlock TextAlignment="Center" Text="{DynamicResource tClose}" />
                             </Button>
                         </StackPanel>
                     </Grid>

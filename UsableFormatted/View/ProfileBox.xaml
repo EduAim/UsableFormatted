@@ -15,28 +15,25 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="40" />
-            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="LoggedInUserName" Foreground="#ff235b8e" Text="Neautorizēts lietotājs" FontSize="16" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Right" Style="{DynamicResource DpTextBlock}" />
+        <TextBlock x:Name="LoggedInUserName" Foreground="#ff235b8e" Text="{DynamicResource tUnauthorizedUser}" FontSize="16" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Right" Style="{DynamicResource DpTextBlock}" />
 
-        <fa:FontAwesome Grid.Column="1" Icon="Cogs"  Foreground="#ff235b8e" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="4,0,4,0" />
-
-        <fa:FontAwesome Grid.Column="2" x:Name="AnonymousIcon" Icon="UserOutline" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsAnonymousVisible}">
+        <fa:FontAwesome Grid.Column="1" x:Name="AnonymousIcon" Icon="UserOutline" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsAnonymousVisible}">
             <fa:FontAwesome.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Autorizēties" Click="MenuLogin_Click"/>
-                    <MenuItem Header="Reģistrēties" Click="MenuRegister_Click"/>
+                    <MenuItem Header="{DynamicResource tAuthorize}" Click="MenuLogin_Click"/>
+                    <MenuItem Header="{DynamicResource tRegister}" Click="MenuRegister_Click"/>
                 </ContextMenu>
             </fa:FontAwesome.ContextMenu>
         </fa:FontAwesome>
 
-        <fa:FontAwesome Grid.Column="2" x:Name="UserIcon" Icon="User" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsAuthorizedVisible}" MouseUp="UserIcon_MouseUp">
+        <fa:FontAwesome Grid.Column="1" x:Name="UserIcon" Icon="User" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding IsAuthorizedVisible}" MouseUp="UserIcon_MouseUp">
             <fa:FontAwesome.ContextMenu>
                 <ContextMenu x:Name="UserProfileMenu">
-                    <MenuItem Header="Lietotāja iestatījumi" Click="MenuSettings_Click"/>
+                    <MenuItem Header="{DynamicResource tUserSettings}" Click="MenuSettings_Click"/>
                     <Separator />
-                    <MenuItem Header="Izrakstīties" Click="MenuLogout_Click"/>
+                    <MenuItem Header="{DynamicResource tSignOut}" Click="MenuLogout_Click"/>
                 </ContextMenu>
             </fa:FontAwesome.ContextMenu>
         </fa:FontAwesome>

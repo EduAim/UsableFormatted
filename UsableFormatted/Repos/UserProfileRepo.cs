@@ -14,8 +14,12 @@ using UsfoModels;
 
 namespace UsableFormatted.Repos
 {
+    delegate void UserChangedHandler(object sender, EventArgs e);
+
     internal static class UserProfileRepo
     {
+        public static event UserChangedHandler? OnUserChanged = null;
+
         private const string SALT = "ŠķīvītisСлаваУкраїніPlauktā";
 
         private static UserProfile? _userProfile = null;
@@ -300,6 +304,9 @@ namespace UsableFormatted.Repos
                     };
                     realm.Add(authorization, update: true);
                 });
+                if (OnUserChanged != null)
+                    OnUserChanged(userId, new EventArgs());
+
                 return true;
             }
             catch (Exception ex)

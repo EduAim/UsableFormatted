@@ -34,24 +34,24 @@
         <StackPanel x:Name="ButtonBox" Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="1" HorizontalAlignment="Center" Visibility="Visible" Margin="0,50,0,0">
             <Button x:Name="NoLoginBtn" Click="NoLoginBtn_Click" Style="{DynamicResource RoundButtonXl}">
                 <Grid>
-                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="Izmantot bez reģistrācijas" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource tWithoutRegistration}" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                 </Grid>
             </Button>
             <Button x:Name="RegisterBtn" Click="RegisterBtn_Click" Style="{DynamicResource RoundButtonXl}">
                 <Grid>
-                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="Reģistrēties" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource tRegister}" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                 </Grid>
             </Button>
             <Button x:Name="LoginBtn" Click="LoginBtn_Click" Style="{DynamicResource RoundButtonXl}">
                 <Grid>
-                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="Autorizēties" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Width="140" TextWrapping="Wrap" TextAlignment="Center" Text="{DynamicResource tAuthorize}" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                 </Grid>
             </Button>
         </StackPanel>
 
 
         <!-- Register -->
-        <Grid x:Name="RegisterBox" Grid.Row="1" VerticalAlignment="Center" Visibility="Hidden" HorizontalAlignment="Center">
+        <Grid x:Name="RegisterBox" Grid.Row="1" VerticalAlignment="Center" Visibility="Collapsed" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="10" />
@@ -67,21 +67,21 @@
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="E-pasts" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource tEmail}" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
             <TextBox Grid.Row="0" Grid.Column="1" Text="" x:Name="RegEmailText" VerticalAlignment="Center"  />
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Parole (nav obligāti)" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource tPasswordOptional}" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
             <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="RegPasswordText" VerticalAlignment="Center" Width="200" />
 
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Parole atkārtoti" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="{DynamicResource tPasswordAgain}" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
             <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="RegConfirmPasswordText" VerticalAlignment="Center" Width="200" />
 
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="Dzimšanas gads" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="{DynamicResource tYearOfBirth}" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
             <TextBox Grid.Row="6" Grid.Column="1" Text="" x:Name="BirthYearText" VerticalAlignment="Center" />
 
             <StackPanel Orientation="Horizontal" Grid.Row="7" HorizontalAlignment="Right" Grid.ColumnSpan="2" Margin="4">
-                <Button Content="Atcelt" Width="160" Click="RegCancelBtn_Click" Style="{DynamicResource RoundButton}" />
-                <Button Content="Reģistrēties" Width="160" Click="RegRegisterBtn_Click" Style="{DynamicResource RoundButton}" />
+                <Button Content="{DynamicResource tCancel}" Width="160" Click="RegCancelBtn_Click" Style="{DynamicResource RoundButton}" />
+                <Button Content="{DynamicResource tRegister}" Width="160" Click="RegRegisterBtn_Click" Style="{DynamicResource RoundButton}" />
             </StackPanel>
         </Grid>
 
@@ -113,15 +113,15 @@
                         <ColumnDefinition Width="200" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="E-pasts" FontSize="20" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource tEmail}" FontSize="20" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
                     <TextBox Grid.Row="0" Grid.Column="1" Text="" x:Name="LoginEmailText" />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Parole" FontSize="20" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource tPassword}" FontSize="20" Margin="0,0,10,0" Style="{DynamicResource DpTextBlock}" />
                     <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="LoginPasswordText" Width="200" />
                 </Grid>
                 <WrapPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
-                    <Button Content="Atcelt" Width="160" FontSize="16"  Click="LoginCancelBtn_Click" Style="{DynamicResource RoundButton}" />
-                    <Button Content="Autorizēties" Width="160" FontSize="16" Click="LoginLoginBtn_Click" Style="{DynamicResource RoundButton}" />
+                    <Button Content="{DynamicResource tCancel}" Width="160" FontSize="16"  Click="LoginCancelBtn_Click" Style="{DynamicResource RoundButton}" />
+                    <Button Content="{DynamicResource tAuthorize}" Width="160" FontSize="16" Click="LoginLoginBtn_Click" Style="{DynamicResource RoundButton}" />
                 </WrapPanel>
             </Grid>
 

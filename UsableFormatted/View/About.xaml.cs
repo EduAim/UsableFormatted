@@ -35,7 +35,7 @@ namespace UsableFormatted.View
             HomepageUrl.RequestNavigate += HomepageUrl_RequestNavigate;
             VersionText.Dispatcher.BeginInvoke(new Action(() =>
             {
-                VersionText.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                VersionText.Text = Assembly.GetExecutingAssembly().GetName()?.Version?.ToString() ?? "2";
             }));
         }
 

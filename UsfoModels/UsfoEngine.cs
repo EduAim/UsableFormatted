@@ -94,7 +94,7 @@ namespace Usfo
             catch (Exception ex)
             {
                 ex.TraceEx();
-                return (false, "Kļūda apstrādājot dokumentu (#ME008)" + Environment.NewLine + ex.Message);
+                return (false, "Error processing the document (#ME008)" + Environment.NewLine + ex.Message);
             }
         }
 

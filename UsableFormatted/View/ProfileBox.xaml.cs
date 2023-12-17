@@ -56,9 +56,9 @@ namespace UsableFormatted.View
                 LoggedInUserName.Text = _dataContext.IsLoggedIn ? (
                     string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.FullName)
                         ? (string.IsNullOrEmpty(UserProfileRepo.LoggedInUser?.Email)
-                            ? "Lietotājs" : UserProfileRepo.LoggedInUser.Email)
+                            ? (string)FindResource("tUser") : UserProfileRepo.LoggedInUser.Email)
                         : UserProfileRepo.LoggedInUser.FullName
-                    ) : "Neautorizēts lietotājs";
+                    ) : (string)FindResource("tUnauthorizedUser");
             }));
         }
 

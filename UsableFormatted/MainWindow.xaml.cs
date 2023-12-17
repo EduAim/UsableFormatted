@@ -27,6 +27,9 @@ namespace UsableFormatted
     public partial class MainWindow : Window
     {
         private bool _isLoading = false;
+        private const string LANGUAGE_EN = "en";
+        private const string LANGUAGE_LV = "lv";
+        private GlobalSettings _settings;
 
         public MainWindow()
         {
@@ -39,15 +42,24 @@ namespace UsableFormatted
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            _settings = GlobalSettingsRepo.GetSettings();
+            SetLanguage(_settings.Language);
+            UserProfileRepo.OnUserChanged += UserProfileRepo_OnUserChanged;
             if (UserProfileRepo.LoggedInUserId > 0)
             {
                 SetPage(EPages.FileUpload);
             }
+            UpdateMenus();
             var isMoodle = MoodleController.InitSocketServer();
             if (isMoodle)
             {
                 MoodleController.OnDocumentReceived += MoodleController_DocumentReceived;
             }
+        }
+
+        private void UserProfileRepo_OnUserChanged(object sender, EventArgs e)
+        {
+            UpdateMenus();
         }
 
         private void MoodleController_DocumentReceived(object sender, EventArgs e)
@@ -134,11 +146,56 @@ namespace UsableFormatted
             MessageContainer.Children.Add(box);
         }
 
+        private void SetLanguage(string language = LANGUAGE_LV)
+        {
+            ResourceDictionary dict = new ResourceDictionary();
+            switch (language) 
+            {
+                case LANGUAGE_EN:
+                    dict.Source = new Uri("Resources\\StringResources.en.xaml", UriKind.Relative);
+                    break;
+
+                case LANGUAGE_LV:
+                default:
+                    dict.Source = new Uri("Resources\\StringResources.lv.xaml", UriKind.Relative);
+                    break;
+            }
+            this.Resources.MergedDictionaries.Add(dict);
+
+            foreach (MenuItem menuItem in LangMenu.Items)
+            {
+                menuItem.IsChecked = language == menuItem.Tag as string;
+            }
+        }
+
+        private void SaveApplyLanguage(string language)
+        {
+            _settings.Language = language;
+            GlobalSettingsRepo.SaveSettings(_settings);
+            SetLanguage(language);
+        }
+
+        private void UpdateMenus()
+        {
+            var isLoggedIn = UserProfileRepo.IsLoggedIn;
+            MenuLogin.IsEnabled = !isLoggedIn;
+            MenuLogout.IsEnabled = isLoggedIn;
+            MenuRegister.IsEnabled = !isLoggedIn;
+            MenuSettings.IsEnabled = isLoggedIn;
+        }
+
         private void MenuHome_Click(object sender, RoutedEventArgs e)
         {
             AboutView.Visibility = Visibility.Collapsed;
-            SetPage(EPages.LoginView);
-            _M._loginView.SetBox("ButtonBox");
+            if (UserProfileRepo.IsLoggedIn)
+            {
+                SetPage(EPages.FileUpload);
+            } 
+            else
+            {
+                SetPage(EPages.LoginView);
+                _M._loginView.SetBox("ButtonBox");
+            }
         }
 
         private void MenuExit_Click(object sender, RoutedEventArgs e)
@@ -151,5 +208,38 @@ namespace UsableFormatted
             AboutView.Visibility = Visibility.Visible;
         }
 
+        private void MenuLangEn_Click(object sender, RoutedEventArgs e)
+        {
+            SaveApplyLanguage(LANGUAGE_EN);
+        }
+
+        private void MenuLangLv_Click(object sender, RoutedEventArgs e)
+        {
+            SaveApplyLanguage(LANGUAGE_LV);
+        }
+
+        private void MenuLogin_Click(object sender, RoutedEventArgs e)
+        {
+            SetPage(EPages.LoginView);
+            _M._loginView.SetBox("LoginBox");
+        }
+
+        private void MenuLogout_Click(object sender, RoutedEventArgs e)
+        {
+            UserProfileRepo.LogoutUser();
+            SetPage(EPages.LoginView);
+            _M._loginView.SetBox("ButtonBox");
+        }
+
+        private void MenuRegister_Click(object sender, RoutedEventArgs e)
+        {
+            SetPage(EPages.LoginView);
+            _M._loginView.SetBox("RegisterBox");
+        }
+
+        private void MenuSettings_Click(object sender, RoutedEventArgs e)
+        {
+            SetUserProfile(true);
+        }
     }
 }

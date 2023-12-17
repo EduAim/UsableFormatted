@@ -20,7 +20,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource DpTextBlock}" TextWrapping="Wrap"> Lūgums novērtēt piedāvāto teksta noformējumu lietošanas komfortu!</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="0" Style="{DynamicResource DpTextBlock}" TextWrapping="Wrap" Text="{DynamicResource tSurveyTitle}"></TextBlock>
                 <Grid x:Name="SurveyGroup1" Grid.Row="0" Grid.Column="1" Margin="20,0,0,10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -35,8 +35,8 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.ColumnSpan="3" Style="{DynamicResource DpTextBlock}" TextWrapping="Wrap" Margin="0,0,5,0">Pilnībā neapmierina</TextBlock>
-                    <TextBlock Grid.ColumnSpan="3" Grid.Column="3" Style="{DynamicResource DpTextBlock}" TextAlignment="Right" Margin="5,0,0,0">Pilnībā apmierina</TextBlock>
+                    <TextBlock Grid.ColumnSpan="3" Style="{DynamicResource DpTextBlock}" TextWrapping="Wrap" Margin="0,0,5,0" Text="{DynamicResource tSurveyNotSatisfied}" />
+                    <TextBlock Grid.ColumnSpan="3" Grid.Column="3" Style="{DynamicResource DpTextBlock}" TextAlignment="Right" Margin="5,0,0,0" Text="{DynamicResource tSurveySatisfied}" />
 
                     <RadioButton x:Name="Rate_0" GroupName="Rate"  Grid.Row="1">0</RadioButton>
                     <RadioButton x:Name="Rate_1" GroupName="Rate" Grid.Row="1" Grid.Column="1" Tag="1">1</RadioButton>
@@ -47,21 +47,33 @@
                     
                 </Grid>
 
-                <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource DpTextBlock}" VerticalAlignment="Top" TextWrapping="Wrap">Vai lasot teksta dokumentus radās diskomforta sajūta acīs vai galvā?</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource DpTextBlock}" VerticalAlignment="Top" TextWrapping="Wrap" Text="{DynamicResource tSurveyDiscomfort}" />
                 <StackPanel x:Name="SurveyGroup2" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Margin="5,0,0,10">
-                    <RadioButton x:Name="Disco_1" GroupName="Disco" Tag="1">Jā</RadioButton>
-                    <RadioButton x:Name="Disco_2" GroupName="Disco" Tag="2">Nē</RadioButton>
+                    <RadioButton x:Name="Disco_1" GroupName="Disco" Tag="1">
+                        <TextBlock Text="{DynamicResource tYes}" />
+                    </RadioButton>
+                    <RadioButton x:Name="Disco_2" GroupName="Disco" Tag="2">
+                        <TextBlock Text="{DynamicResource tNo}" />
+                    </RadioButton>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource DpTextBlock}" VerticalAlignment="Top">Vai turpmāk izvēlētos mainīt ieteikto formatējumu?</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource DpTextBlock}" VerticalAlignment="Top" TextWrapping="Wrap" Text="{DynamicResource tSurveyChangeFuture}" />
                 <StackPanel x:Name="SurveyGroup3" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="5,0,0,10">
-                    <RadioButton x:Name="Format_1" GroupName="Format" Tag="1">Jā</RadioButton>
-                    <RadioButton x:Name="Format_2" GroupName="Format" Tag="2">Nē</RadioButton>
+                    <RadioButton x:Name="Format_1" GroupName="Format" Tag="1">
+                        <TextBlock Text="{DynamicResource tYes}" />
+                    </RadioButton>
+                    <RadioButton x:Name="Format_2" GroupName="Format" Tag="2">
+                        <TextBlock Text="{DynamicResource tNo}" />
+                    </RadioButton>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" HorizontalAlignment="Center">
-                    <Button x:Name="FinishBtn" Width="140" HorizontalAlignment="Center" Click="FinishBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">Gatavs!</Button>
-                    <Button x:Name="CancelBtn" Width="140" HorizontalAlignment="Center" Click="CancelBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">Atlikt!</Button>
+                    <Button x:Name="FinishBtn" Width="140" HorizontalAlignment="Center" Click="FinishBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
+                        <TextBlock Text="{DynamicResource tReady}" />
+                    </Button>
+                    <Button x:Name="CancelBtn" Width="140" HorizontalAlignment="Center" Click="CancelBtn_Click" Style="{DynamicResource RoundButton}" Margin="5,0,5,0">
+                        <TextBlock Text="{DynamicResource tCancel}" />
+                    </Button>
                     
                 </StackPanel>
             </Grid>

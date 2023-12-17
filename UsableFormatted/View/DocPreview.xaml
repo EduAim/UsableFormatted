@@ -78,12 +78,12 @@
                 <WrapPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Button x:Name="OpenFileButton" Click="OpenFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Atvērt DOCX" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tOpenDocx}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                     <Button x:Name="OpenPdfButton" Click="OpenPdfButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Atvērt PDF" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tOpenPdf}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                 </WrapPanel>
@@ -91,12 +91,12 @@
                 <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Button x:Name="SaveFileButton" Click="SaveFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Saglabāt DOCX" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tSaveDocx}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                     <Button x:Name="SavePdfFileButton" Click="SavePdfFileButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Saglabāt PDF" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tSavePdf}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                 </WrapPanel>
@@ -104,12 +104,12 @@
                 <WrapPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Button x:Name="SettingsButton" Click="SettingsButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Stila maiņa" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tStyleChange}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                     <Button x:Name="CancelButton" Click="CancelButton_Click" Style="{DynamicResource RoundButton}" Margin="2">
                         <Grid>
-                            <TextBlock Width="120" TextAlignment="Center" Text="Aizvērt" VerticalAlignment="Center" />
+                            <TextBlock Width="120" TextAlignment="Center" Text="{DynamicResource tClose}" VerticalAlignment="Center" />
                         </Grid>
                     </Button>
                 </WrapPanel>
@@ -121,14 +121,14 @@
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                        <TextBlock Text="Fonts" Margin="0,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <TextBlock Text="{DynamicResource tFont}" Margin="0,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                         <ComboBox x:Name="FontsComboBox" Width="150" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
-                        <TextBlock Text="Izmērs" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <TextBlock Text="{DynamicResource tSize}" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                         <ComboBox x:Name="FontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
-                        <TextBlock Text="Galvenes izmērs" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
+                        <TextBlock Text="{DynamicResource tHeadingSize}" Margin="10,0,4,0" VerticalAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                         <ComboBox x:Name="HeadingFontSizeComboBox" Width="100" VerticalAlignment="Center" Style="{DynamicResource DpComboBoxStyle}">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}">
@@ -139,9 +139,9 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,4,0,0">
-                        <Button x:Name="SettingsAplyBtn" Content="Pielietot" Style="{DynamicResource RoundButton}" Click="SettingsAplyBtn_Click" />
-                        <Button x:Name="SettingsSaveBtn" Content="Pievienot &amp; Saglabāt" Style="{DynamicResource RoundButton}" Click="SettingsSaveBtn_Click" Visibility="{Binding IsAuthorizedElementVisibility}" />
-                        <Button x:Name="SettingsCancelBtn" Content="Atlikt" Style="{DynamicResource RoundButton}" Click="SettingsCancelBtn_Click" />
+                        <Button x:Name="SettingsAplyBtn" Content="{DynamicResource tApply}" Style="{DynamicResource RoundButton}" Click="SettingsAplyBtn_Click" />
+                        <Button x:Name="SettingsSaveBtn" Content="{DynamicResource tApplySave}" Style="{DynamicResource RoundButton}" Click="SettingsSaveBtn_Click" Visibility="{Binding IsAuthorizedElementVisibility}" />
+                        <Button x:Name="SettingsCancelBtn" Content="{DynamicResource tCancel}" Style="{DynamicResource RoundButton}" Click="SettingsCancelBtn_Click" />
                     </StackPanel>
 
                 </StackPanel>

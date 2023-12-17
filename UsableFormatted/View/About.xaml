@@ -25,12 +25,16 @@
                             <RowDefinition Height="auto" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.ColumnSpan="3" Text="About" Foreground="White" FontSize="28" Padding="0" Style="{DynamicResource DpTextBlock}" />
+                        <TextBlock Grid.ColumnSpan="3" Text="{DynamicResource tAbout}" Foreground="White" FontSize="28" Padding="0" Style="{DynamicResource DpTextBlock}" />
                         <TextBlock Grid.Row="1" Text="USABLE" Foreground="#ffe7cf85" FontSize="48" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Text="&amp;" Foreground="#ffe7cf85" FontSize="48" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" Margin="10,0,10,0" />
                         <TextBlock Grid.Row="1" Grid.Column="2" Text="&#xae;" Foreground="White" FontSize="48" Padding="0" Style="{DynamicResource DpTextBlock}" />
                         <TextBlock Grid.Row="2" Grid.ColumnSpan="3" Text="FORMATTED" Foreground="White" FontSize="48" FontWeight="Bold" Padding="0" Style="{DynamicResource DpTextBlock}" />
-                        <TextBlock x:Name="VersionText" Grid.ColumnSpan="3" Grid.Row="3" Text="Versija: 2" Foreground="White" FontSize="18" Padding="0" TextAlignment="Center" Style="{DynamicResource DpTextBlock}" Margin="0,20,0,0" />
+                        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="3" HorizontalAlignment="Center">
+                            <TextBlock Text="{DynamicResource tVersion}" Foreground="White" FontSize="18" Padding="0" TextAlignment="Center" Style="{DynamicResource DpTextBlock}" Margin="0,20,0,0" />
+                            <TextBlock x:Name="VersionText" Text="2" Foreground="White" FontSize="18" Padding="0" TextAlignment="Center" Style="{DynamicResource DpTextBlock}" Margin="4,20,0,0" />
+                        </StackPanel>
+                        
                         <TextBlock Grid.ColumnSpan="3" Grid.Row="4" Text="&#xa9; &quot;Usable &amp; Formatted&quot; 2023" Foreground="White" FontSize="14" Padding="0" TextAlignment="Center" Style="{DynamicResource DpTextBlock}" />
                         <TextBlock Grid.ColumnSpan="3" Grid.Row="5" Text="" FontSize="12" Padding="0" TextAlignment="Center" Style="{DynamicResource DpTextBlock}">
                             <Hyperlink x:Name="HomepageUrl" NavigateUri="https://www.eduaim.eu/tools" Foreground="#ffe7cf85">https://www.eduaim.eu/tools</Hyperlink>

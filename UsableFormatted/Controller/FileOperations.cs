@@ -47,14 +47,14 @@ namespace UsableFormatted.Controller
             var engine = UsfoController.GetEngine();
             var docResult = engine.ProcessDocument(FileOperations.DocxPath, formatSet);
             if (!docResult.result)
-                return (false, false, "Dokumenta apstrādes kļūda" + Environment.NewLine + docResult.errorMessage);
+                return (false, false, (string)App.Current.Resources["tDocumentProcessingError"] + Environment.NewLine + docResult.errorMessage);
 
             if (!engine.IsEngineAvailable())
                 return (true, false, string.Empty);
 
             var convResult = engine.CreatePdfFromDocx(FileOperations.DocxPath, FileOperations.PdfPath);
             if (!convResult.result)
-                return (false, false, "Dokumenta konvertācijas kļūda" + Environment.NewLine + convResult.errorMessage);
+                return (false, false, (string)App.Current.Resources["tDocumentConversionError"] + Environment.NewLine + convResult.errorMessage); 
 
             return (true, true, string.Empty);
         }
@@ -70,7 +70,7 @@ namespace UsableFormatted.Controller
 
                 if (!IsAllowedFileType(souceFileName))
                 {
-                    errorMessage = "Neatpazīts faila formāts!";
+                    errorMessage = (string)App.Current.Resources["tUnrecognizedFileFormat"];
                     result = false;
                 }
                 else if (IsFileType(souceFileName, ".docx", out shortName))
@@ -96,7 +96,7 @@ namespace UsableFormatted.Controller
             catch (Exception ex)
             {
                 ex.TraceEx();
-                var errorMessage = "Kļūda kopējot failu" + Environment.NewLine + ex.Message;
+                var errorMessage = (string)App.Current.Resources["tErrorCopyingFile"] + Environment.NewLine + ex.Message;
                 return (false, errorMessage);
             }
         }
