@@ -232,7 +232,6 @@ namespace UsableFormatted.View
 
         private async void OnRecentFileSelected(string fileName)
         {
-            Debug.WriteLine($"OnRecentFileSelected: {fileName}");
             if (!File.Exists(fileName))
             {
                 _M._mainWindow.ShowMessage((string)App.Current.Resources["tDocumentNotAvailable"]);

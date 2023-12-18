@@ -148,20 +148,7 @@ namespace UsableFormatted
 
         private void SetLanguage(string language = LANGUAGE_LV)
         {
-            ResourceDictionary dict = new ResourceDictionary();
-            switch (language) 
-            {
-                case LANGUAGE_EN:
-                    dict.Source = new Uri("Resources\\StringResources.en.xaml", UriKind.Relative);
-                    break;
-
-                case LANGUAGE_LV:
-                default:
-                    dict.Source = new Uri("Resources\\StringResources.lv.xaml", UriKind.Relative);
-                    break;
-            }
-            this.Resources.MergedDictionaries.Add(dict);
-
+            ((App)Application.Current).ChangeAppLanguage(language);
             foreach (MenuItem menuItem in LangMenu.Items)
             {
                 menuItem.IsChecked = language == menuItem.Tag as string;
